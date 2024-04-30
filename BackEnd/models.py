@@ -8,7 +8,6 @@ class signupUser(BaseModel):
     password: str
     reg_number : str
     session : str
-    uid: str
     department: str
     cf_handle: str
     codechef_handle: str

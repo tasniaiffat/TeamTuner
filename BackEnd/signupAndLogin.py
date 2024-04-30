@@ -13,7 +13,6 @@ from firebase import firestore_db
 
 signupAndLoginRouter = APIRouter()
 
-
 class signupUser:
 
     signupUser = models.signupUser
@@ -23,13 +22,15 @@ class signupUser:
     def add_data(collection_name, document_name, data):
         document = signupUser.signupDatabase.collection(collection_name).document(document_name)
         document.set(data)
-        
-    @signupAndLoginRouter.post("/signup")
+    
+    
+            
+    @signupAndLoginRouter.post("/")
     async def signup(user: signupUser):
         email = user.email
         password = user.password
         department = user.department  # Assuming department is a field in the signupUser model
-
+        
         try:
             user_record = auth.create_user(
                 email=email,
