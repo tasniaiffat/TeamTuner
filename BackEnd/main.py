@@ -4,6 +4,7 @@ import signupAndLogin as signupAndLogin
 from firebase import firestore_db
 from fastapi.middleware.cors import CORSMiddleware
 import contest as contest
+import codeforcesAPI
 
 app = FastAPI()
 
@@ -16,6 +17,11 @@ app.add_middleware(
 
 app.include_router(signupAndLogin.signupAndLoginRouter)
 app.include_router(contest.contestRouter)
+app.include_router(codeforcesAPI.codeforcesAPIRouter)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
+    # upcoming_contests = codeforcesAPI.codeforcesAPI.fetchUpcomingContests()
+    # print(len(upcoming_contests))
+    # solve_count = codeforcesAPI.codeforcesAPI.fetchContestResult(1972, "Inori")
+    # print(solve_count)
