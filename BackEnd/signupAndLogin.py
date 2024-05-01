@@ -9,7 +9,7 @@ from firebase_admin import auth, credentials, firestore
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from fastapi import APIRouter
-from firebase import firestore_db
+from firebase import firestore_db, firebase
 
 signupAndLoginRouter = APIRouter()
 
@@ -67,10 +67,26 @@ class signupUser:
 class loginUser:
     loginUser = models.loginUser
     loginDatabase = firestore.client()
+    
         
     @signupAndLoginRouter.post("/login")
     async def login(user: loginUser):
-        email = user.email
-        password = user.password
-        department = user.department  
+        try:
+            email = user.email
+            password = user.password
+            auth = firebase.auth()
+            
+            # Verify email and password with Firebase authentication
+            user = auth.sign_in_with_email_and_password(email, password)
+            
+            # If no exceptions are raised, authentication is successful
+            return JSONResponse(content={"message": "Login Successful"})
+        
+        except Exception as e:
+            # Log generic error message
+            print(f"Internal Server Error: {e}")
+            # Return generic error message
+            raise HTTPException(status_code=401, detail="Username and Password Do Not Match")
+
+        
 

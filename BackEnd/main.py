@@ -8,10 +8,9 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow requests from any origin (you might want to restrict this in production)
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Allow these HTTP methods
-    allow_headers=["*"],  # Allow any headers
+    allow_origins=["*"],  
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
+    allow_headers=["*"],  
 )
 
 app.include_router(signupAndLogin.signupAndLoginRouter)

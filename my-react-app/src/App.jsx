@@ -1,14 +1,16 @@
-import Header from './Header/Header.jsx'
-import SignupBody from './SignupBody/SignupBody.jsx'
-
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import SignupPage from './SignupPage.jsx';
+import LoginPage from './LoginPage.jsx';
 
 function App() {
 
   return (
-    <>
-      <Header/>
-      <SignupBody/>
-    </>
+    <Router>
+            <Routes>
+                <Route path="/" element={<SignupPage />} />
+                <Route path="/login" element={<LoginPage />} />
+            </Routes>
+        </Router>
   );
 }
 

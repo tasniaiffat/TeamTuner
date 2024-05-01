@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 function SignupBody(){
 
@@ -18,6 +19,8 @@ function SignupBody(){
         atcoder_handle: '',
         vjudge_handle: ''
     });
+
+    const navigate = useNavigate()
 
     async function handleSubmit(event){
         console.log('Form Data:', formData);
@@ -48,8 +51,7 @@ function SignupBody(){
             
             toast.success('User account created successfully');
             
-            const data = await response.json();
-            console.log(data); // Log success message or handle response as needed
+            navigate('./login');
 
         } catch (error) {
             console.error('Error:', error);
