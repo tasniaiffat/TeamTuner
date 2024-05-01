@@ -24,7 +24,7 @@ class contest:
         document = contest.contest_db.collection(collection_name).document(document_name)
         document.set(data)
         
-    @contestRouter.post("/contest/addParticipant")
+    @contestRouter.post("/contest/addParticipantInfo")
     async def AddParticipantInfo(info: participantInfo):
         try:
             contest.add_data("Contestant Information", info.handle + " " + info.dateAndTime + " " + info.oj, {
@@ -35,7 +35,7 @@ class contest:
                 "penalty": info.penalty 
             })
             
-            return JSONResponse(content={"message": "Added Successfully"})
+            return JSONResponse(content={"message": "Contestant Information Added Successfully"})
         except auth.EmailAlreadyExistsError:
             raise HTTPException(
                 status_code=400,
@@ -52,8 +52,34 @@ class contest:
             })
             
             return JSONResponse(content={"message": "Added Successfully"})
-        except auth.EmailAlreadyExistsError:
+        except Exception:
             raise HTTPException(
                 status_code=400,
-                detail="Email already used"
+                detail="Could Not Add Contest"
             )
+    
+    
+          
+    @contestRouter.post("/contest/RemoveContest")
+    async def RemoveContest(info: contestInfo):
+        try:
+            collection_name = f"{info.type} Contest"
+            document_name = f"{info.oj} {info.dateAndTime}"
+            
+            print(f"Removing contest: {document_name} from collection: {collection_name}")
+            
+            document_ref = contest.contest_db.collection(collection_name).document(document_name)
+            
+            if not document_ref.get().exists:
+                raise HTTPException(status_code=404, detail="Contest not found")
+
+            document_ref.delete()
+            
+            print("Contest removed successfully")
+            
+            return JSONResponse(content={"message": "Contest removed successfully"})
+        except HTTPException as http_error:
+            raise http_error
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            raise HTTPException(status_code=500, detail="Internal server error")
