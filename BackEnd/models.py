@@ -27,20 +27,19 @@ class PersonalInfo(BaseModel):
     registration_number: str
     session: str
     
-class OnlineContest(BaseModel):
-    dateAndTime: str
-    oj: str
-    penalty: int
-    solved: int
-    email: int
-    
-class OfflineContest(BaseModel):
+class participantInfo(BaseModel):
     dateAndTime: str
     handle: str
-    penalty: str
-    solved: str
-    email: str
+    type: str
+    oj: str
+    solved: int
+    penalty: int
 
+class contestInfo(BaseModel):
+    dateAndTime: str
+    type: str
+    oj: str
+    
 class judgeInformation(BaseModel):
     atcoder: str
     codechef: str
