@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from './Header/Header.jsx';
-import LoginBody from './LoginBody/LoginBody.jsx';
+import Header from '../Header/Header.jsx';
+import LoginBody from '../LoginBody/LoginBody.jsx';
 
 function LoginPage() {
   return (
