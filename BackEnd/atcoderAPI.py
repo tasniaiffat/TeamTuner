@@ -12,31 +12,17 @@ from fastapi.exceptions import HTTPException
 from fastapi import APIRouter
 from firebase import firestore_db, firebase
 import requests
+import atcoderDataScraperAPI
 
 atcoderAPIRouter = APIRouter()
 
 class atcoderAPI:
 
     def fetchUpcomingContests():
-        URL = "https://kenkoooo.com/atcoder/resources/contests.json"
         
         try:
-            current_epoch_time = int(time.time())
-            upcoming_contests = set()
-            response = requests.get(URL)
-            if(response.status_code == 200):
-                contest_list = response.json()
-                for contest in contest_list:
-                    if(contest["start_epoch_second"]>current_epoch_time):
-                        upcoming_contests.add(contest)
-        
-            else:
-                raise HTTPException(
-                    status_code=400,
-                    detail="Bad Request"
-                )
-
-            return  upcoming_contests
+            upcomingCountests = atcoderDataScraperAPI.atcoderUpcomingContests()
+            return upcomingCountests
         
         except Exception as e:
             return {"error" : str(e)}              
