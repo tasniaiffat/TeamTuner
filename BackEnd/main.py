@@ -5,6 +5,7 @@ from firebase import firestore_db
 from fastapi.middleware.cors import CORSMiddleware
 import contest as contest
 import codeforcesAPI
+import atcoderAPI
 
 app = FastAPI()
 
@@ -21,7 +22,7 @@ app.include_router(codeforcesAPI.codeforcesAPIRouter)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
-    # upcoming_contests = codeforcesAPI.codeforcesAPI.fetchUpcomingContests()
+    # upcoming_contests = atcoderAPI.atcoderAPI.fetchUpcomingContests()
     # print(len(upcoming_contests))
-    # solve_count = codeforcesAPI.codeforcesAPI.fetchContestResult(1972, "Inori")
+    # solve_count = atcoderAPI.atcoderAPI.fetchContestResult("abc351", "Farhan188")
     # print(solve_count)
