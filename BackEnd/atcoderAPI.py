@@ -12,7 +12,7 @@ from fastapi.exceptions import HTTPException
 from fastapi import APIRouter
 from firebase import firestore_db, firebase
 import requests
-import atcoderDataScraperAPI
+import BackEnd.atcoderDataScraper as atcoderDataScraper
 
 atcoderAPIRouter = APIRouter()
 
@@ -21,7 +21,7 @@ class atcoderAPI:
     def fetchUpcomingContests():
         
         try:
-            upcomingCountests = atcoderDataScraperAPI.atcoderUpcomingContests()
+            upcomingCountests = atcoderDataScraper.atcoderUpcomingContests()
             return upcomingCountests
         
         except Exception as e:
