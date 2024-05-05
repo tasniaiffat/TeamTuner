@@ -1,6 +1,20 @@
-.Title {
-    display: flex;
+.header {
+    display: flex; /* Establishes a flex container */
+    align-items: center; /* Aligns children vertically in the middle */
+    padding: 10px; /* Adds padding around the content within the header */
     justify-content: center;
-    align-items: center;
-    height: 0vh;
 }
+
+.logo {
+    height: 50px; /* Set the height of the logo */
+    width: auto; /* Maintains the aspect ratio of the logo */
+    margin-right: 20px; /* Adds some space between the logo and the title */
+}
+
+.Title {
+    font-size: 30px; /* Adjust the font size as needed */
+    margin: 0; /* Removes default margin to align text properly */
+    line-height: 50px; /* Ensures the text height matches the logo */
+    color: #333; /* Set the color of the text */
+}
+

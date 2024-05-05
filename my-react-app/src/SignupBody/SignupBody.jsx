@@ -72,7 +72,8 @@ function SignupBody(){
     return (
         <>
         <div className='wrapper'>
-            <h1>Sign Up</h1>
+            <Header/>
+            <h2>Sign Up</h2>
             <form onSubmit={handleSubmit}>
                 <div className="input-box">
                     {/* <label>First Name: </label> */}

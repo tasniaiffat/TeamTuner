@@ -7,10 +7,10 @@ import Header from '../Header/Header';
 const Login = () => {
   return (
     <>
-    <Header></Header>
     <div className='wrapper'>
         <form action ="">
-            <h1>Login</h1>
+            <Header/>
+            <h2>Login</h2>
             <div className="input-box">
                 <BiSolidUserCircle className='icon'/>
                 <input type="text" placeholder='Username' required></input>
