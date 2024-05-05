@@ -1,144 +1,81 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
-import Header from '../Header/Header';
-import './SignupBody.css'
+import firebase_admin
+import firebase_admin.firestore
+import pyrebase
+import models
+import time
 
-function SignupBody(){
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from firebase_admin import auth, credentials, firestore
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import HTTPException
+from fastapi import APIRouter
+from firebase import firestore_db, firebase
+import requests
+import BackEnd.atcoderDataScraper as atcoderDataScraper
 
-    const [formData, setFormData] = useState({
-        first_name: '',
-        last_name: '',
-        email: '',
-        password: '',
-        confirm_password: '',
-        reg_number: '',
-        session: '',
-        department: '',
-        cf_handle: '',
-        codechef_handle: '',
-        atcoder_handle: '',
-        vjudge_handle: ''
-    });
+atcoderAPIRouter = APIRouter()
 
-    const navigate = useNavigate()
+class atcoderAPI:
 
-    async function handleSubmit(event){
-        console.log('Form Data:', formData);
-        event.preventDefault();
-        try {
-            console.log('Form Data:', formData);
-            if (formData.password !== formData.confirm_password) {
-                toast.error('Passwords do not match');
-                return;
-            }
+    def fetchUpcomingContests():
+        
+        try:
+            upcomingCountests = atcoderDataScraper.atcoderUpcomingContests()
+            return upcomingCountests
+        
+        except Exception as e:
+            return {"error" : str(e)}              
+        
+    def fetchContestResult(contest_id, handle):
+        epoch_time_now = int(time.time())
+        Contest_URL = "https://kenkoooo.com/atcoder/resources/contests.json"
+        Submission_URL = "https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=chokudai&from_second=1560046356"
+        
+        try:
+            time_period = 5*24*60*60
+            begin_time = epoch_time_now - time_period
+            Submission_URL = f"https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user={handle}&from_second={begin_time}"
 
-            const { confirm_password, ...formDataWithoutConfirmPassword } = formData;
+            response = requests.get(Contest_URL)
+            if response.status_code==200:
+                contest_list = requests.get(Contest_URL).json()
+                # print("in contest list")
+                for contest in contest_list:
+                    
+                    if contest["id"]==contest_id:
+                        
+                        contest_start_time = contest["start_epoch_second"]
+                        duration = contest["duration_second"]
+                        contest_end_time = contest_start_time + duration
+                        
+                        solved_questions = set()
+                        
+                        submissionResponse = requests.get(Submission_URL)
+                        
+                        if submissionResponse.status_code==200:
+                            
+                            # print("in submission list")
+                            submission_list = requests.get(Submission_URL).json()
+                            # print(contest_start_time)
+                            # print(contest_end_time) 
+                            for submission in submission_list:
+                                if (submission["contest_id"]==contest_id) and submission["epoch_second"]>=contest_start_time and submission["epoch_second"]<=contest_end_time:
+                                    solved_questions.add(submission["problem_id"])
+                              
+                            return len(solved_questions)
+                        
+                        else:
+                            raise HTTPException(
+                            status_code=400,
+                            detail="Bad Request"
+                        )
             
-
-            const response = await fetch('http://127.0.0.1:8000/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formDataWithoutConfirmPassword)
-            });
-            
-            
-
-            if (!response.ok) {
-                throw new Error('Failed to create user account');
-            }
-            
-            toast.success('User account created successfully');
-            
-            navigate('./login');
-
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-    async function handleChange (event){
-        console.log(formData)
-        const { name, value } = event.target;
-        setFormData(prevState => ({
-          ...prevState,
-          [name]: value
-        }));
-      };
-
-    return (
-        <>
-        <div className='wrapper'>
-            <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="input-box">
-                    {/* <label>First Name: </label> */}
-                    <input type="text" id="FirstName" placeholder="First Name" name = "first_name" value={formData.first_name} onChange={handleChange} required />
-                    {/* <input type="text" id="LastName" placeholder="Last Name" name = "last_name" value={formData.last_name} onChange={handleChange} required /> */}
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Last Name: </label> */}
-                    <input type="text" id="LastName" placeholder="Last Name" name = "last_name" value={formData.last_name} onChange={handleChange} required />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Email: </label> */}
-                    <input type="email" id="Email" placeholder="Email Address" name = "email" value={formData.email} onChange={handleChange} required />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Registration Number: </label> */}
-                    <input type="text" id="RegNo" placeholder="Registration Number e.g. 2020415637" name = "reg_number" value={formData.reg_number} onChange={handleChange} required />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Department: </label> */}
-                    <input type="text" id="Dept" placeholder="Department e.g. CSE" name = "department" value={formData.department} onChange={handleChange} required />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Session: </label> */}
-                    <input type="text" id="Session" placeholder="Session e.g 2020-21" name = "session" value={formData.session} onChange={handleChange} required />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Password: </label> */}
-                    <input type="password" id="Password" placeholder= "Set Password" name = "password" value={formData.password} onChange={handleChange} required minLength="8" />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Confirm Password: </label> */}
-                    <input type="password" id="Confirm" placeholder= "Confirm Password" name = "confirm_password" value={formData.confirm_password} onChange={handleChange} required minLength="8" />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Codeforces Handle: </label> */}
-                    <input type="text" id="CfHandle" placeholder= "Codeforces Handle" name = "cf_handle" value={formData.cf_handle} onChange={handleChange} required />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Codechef Handle: </label> */}
-                    <input type="text" id="CCHandle" placeholder= "Codechef Handle" name = "codechef_handle" value={formData.codechef_handle} onChange={handleChange} required />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>AtCoder Handle: </label> */}
-                    <input type="text" id="AtcoderHandle" placeholder= "Atcoder Handle" name = "atcoder_handle" value={formData.atcoder_handle} onChange={handleChange} required />
-                </div>
-
-                <div className="input-box">
-                    {/* <label>Vjudge Handle: </label> */}
-                    <input type="text" id="VjudgeHandle" placeholder= "Vjudge Handle" name = "vjudge_handle" value={formData.vjudge_handle} onChange={handleChange} required />
-                </div>
-                <button type='submit'>Sign Up</button>
-            </form>
-        </div> 
-        </> 
-    );
-}
-
-export default SignupBody;
+            else:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Bad Request"
+                )
+                
+        except Exception as e:
+            return {"error" : str(e)}
