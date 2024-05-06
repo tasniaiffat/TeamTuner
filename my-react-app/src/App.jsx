@@ -1,6 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import SignupPage from './SignUpPage/SignupPage.jsx';
-import LoginPage from './LoginPage/LoginPage.jsx';
 import Login from './LoginTasnia/Login.jsx';
 import SignupBody from './SignupBody/SignupBody.jsx';
 
