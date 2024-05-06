@@ -3,8 +3,16 @@ import './Login.css';
 import { BiSolidUserCircle } from "react-icons/bi";
 import { FaLock } from "react-icons/fa";
 import Header from '../Header/Header';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+function Login() {
+
+    const navigate=useNavigate();
+
+    async function handleRegisterLink(event){
+        console.log('User does not have an account');
+        navigate('..');
+    }
   return (
     <>
     <div className='wrapper'>
@@ -24,7 +32,7 @@ const Login = () => {
                 <a href='#'>Forgot Password?</a>
             </div>
             <button type='submit'>Login</button>
-            <div className='register-link'>
+            <div className='register-link' onClick={handleRegisterLink}>
                 <p>Don't have an account? <a href='#'>Register</a></p>
             </div>
         </form>
