@@ -3,9 +3,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
-import './SignupBody.css'
+import './Signup.css'
 
-function SignupBody(){
+function Signup(){
 
     const [formData, setFormData] = useState({
         first_name: '',
@@ -58,6 +58,9 @@ function SignupBody(){
         } catch (error) {
             console.error('Error:', error);
         }
+
+        //testing. delete the following line later
+        navigate('./login');
     };
 
     async function handleChange (event){
@@ -178,11 +181,11 @@ function SignupBody(){
                 <button type='submit'>Sign Up</button>
                 <div className='login-link' onClick={handleLoginLink}>
                 <p>Already have an account? <a href='#'>Login</a></p>
-                </div>
+            </div>
             </form>
         </div> 
         </> 
     );
 }
 
-export default SignupBody;
+export default Signup;
