@@ -4,7 +4,7 @@ const fetchData = async () => {
   try {
     const data = await fetchLeaderboardData();
     if (data) {
-      console.log(data);
+      // console.log(data);
     } else {
       setError('Failed to fetch leaderboard data');
     }
@@ -13,4 +13,3 @@ const fetchData = async () => {
   }
 };
 
-fetchData();

@@ -46,3 +46,9 @@ class judgeInformation(BaseModel):
     vjudge: str
     codeforces: str
     email: str
+    
+class contestWeight(BaseModel):
+    cf_weight: float
+    cc_weight: float
+    ac_weight: float
+    vjudge_weight: float

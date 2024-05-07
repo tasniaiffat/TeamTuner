@@ -7,80 +7,72 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import MenuHeader from "../../components/MenuHeader";
 import { fetchLeaderboardData } from "../../data/participantData.js";
-
-const fetchData = async () => {
-  try {
-    const data = await fetchLeaderboardData();
-    if (data) {
-      console.log(data);
-    } else {
-      setError('Failed to fetch leaderboard data');
-    }
-  } catch (error) {
-    setError('Error fetching leaderboard data');
-  }
-};
+import { useState, useEffect } from 'react';
 
 
 const Leaderboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const [rowData, setRowData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchLeaderboardData();
+        console.log('Fetched data:', data);
+        if (data) {
+          setRowData(data);
+        } else {
+          console.error('Failed to fetch leaderboard data');
+        }
+      } catch (error) {
+        console.error('Error fetching leaderboard data:', error);
+      }
+    };
+
+    fetchData();
+  }, []); 
+
   const columns = [
-    { field: "id", headerName: "ID" },
+    { field: "id", headerName: "Rank" },
     {
-      field: "name",
-      headerName: "Name",
+      field: "username",
+      headerName: "Username",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
+      field: "cf_solve",
+      headerName: "Codeforces",
       type: "number",
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "phone",
-      headerName: "Phone Number",
+      field: "cc_solve",
+      headerName: "Codechef",
+      type: "number",
       flex: 1,
     },
     {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
+      field: "ac_solve",
+      headerName: "Atcoder",
+      type: "number",
+      flex: 1
     },
     {
-      field: "accessLevel",
-      headerName: "Access Level",
-      flex: 1,
-      renderCell: ({ row: { access } }) => {
-        return (
-          <Box
-            width="60%"
-            m="0 auto"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              access === "admin"
-                ? colors.greenAccent[600]
-                : access === "manager"
-                ? colors.greenAccent[700]
-                : colors.greenAccent[700]
-            }
-            borderRadius="4px"
-          >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
-            </Typography>
-          </Box>
-        );
-      },
+      field: "vjudge_solve",
+      headerName: "Offline",
+      type: "number",
+      flex: 1
     },
+    {
+      field: "score",
+      headerName: "Score",
+      type: "float",
+      flex: 1
+    }
   ];
 
   return (
@@ -118,7 +110,7 @@ const Leaderboard = () => {
         
         <DataGrid
           checkboxSelection
-          rows={mockDataTeam}
+          rows={rowData}
           columns={columns}
           slots={{
             toolbar: GridToolbar,

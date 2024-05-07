@@ -12,7 +12,7 @@ from fastapi.exceptions import HTTPException
 from fastapi import APIRouter
 from firebase import firestore_db, firebase
 import requests
-import BackEnd.atcoderDataScraper as atcoderDataScraper
+import atcoderDataScraper as atcoderDataScraper
 
 atcoderAPIRouter = APIRouter()
 
