@@ -5,7 +5,7 @@ const MenuHeader = ({ title, subtitle }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
-    <Box mb="30px">
+    <Box mb="20px">
       <Typography
         variant="h2"
         color={colors.grey[100]}
@@ -14,7 +14,11 @@ const MenuHeader = ({ title, subtitle }) => {
       >
         {title}
       </Typography>
-      <Typography variant="h5" color={colors.greenAccent[400]}>
+      <Typography
+        variant="h5"
+        color={colors.greenAccent[400]}
+        sx={{ m: "0 0 0px 0" }}
+      >
         {subtitle}
       </Typography>
     </Box>
