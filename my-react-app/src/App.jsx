@@ -7,6 +7,7 @@ import SignupBody from "./SignupBody/SignupBody.jsx";
 import Topbar from "./scenes/global/Topbar.jsx";
 import Sidebar from "./scenes/global/Sidebar.jsx";
 import Dashboard from "./scenes/dashboard";
+import Leaderboard from "./scenes/leaderboard/index.jsx";
 // import Leaderboard from "./scenes/teams";
 // import UpcomingContests from "./scenes/upcomingcontests";
 // import Teams from "./scenes/teams";
@@ -38,7 +39,7 @@ function App() {
             
             <Routes>
               <Route path ='/' element={<Dashboard/>}/>
-              {/* <Route path ='/leaderboard' element={Leaderboard}/> */}
+              <Route path ='/leaderboard' element={<Leaderboard/>}/>
               {/* <Route path ='/teams' element={Teams}/> */}
               {/* <Route path ='/upcomingcontests' element={UpcomingContests}/> */}
             </Routes>
