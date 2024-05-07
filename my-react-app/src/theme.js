@@ -159,6 +159,7 @@ export const themeSettings = (mode) => {
             },
             background: {
               default: "#fcfcfc",
+              // default: "#faf5f5"
             },
           }),
     },

@@ -17,7 +17,29 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+import GroupsIcon from '@mui/icons-material/Groups';
+import InfoIcon from '@mui/icons-material/Info';
 import TeamTuner from "../../assets/TeamTuner.png";
+
+//structure of each meny item
+const Item = ({ title, to, icon, selected, setSelected }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  return (
+    <MenuItem
+      active={selected === title}
+      style={{
+        color: colors.grey[100],
+      }}
+      onClick={() => setSelected(title)}
+      icon={icon}
+    >
+      <Typography>{title}</Typography>
+      <Link to={to} />
+    </MenuItem>
+  );
+};
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -105,6 +127,50 @@ const Sidebar = () => {
               </Box>
             </Box>
           )}
+
+          {/* {list all menu items here} */}
+          <Box paddingLeft={isCollapsed ? undefined : "8%"}>
+
+          <Item
+              title="Dashboard"
+              to="/"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Leaderboard"
+              to="/leaderboard"
+              icon={<LeaderboardIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Upcoming Contests"
+              to="/contests"
+              icon={<CalendarTodayOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Teams"
+              to="/teams"
+              icon={<GroupsIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+<Item
+              title="About"
+              to="/about"
+              icon={<InfoIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+          </Box>
         </Menu>
       </ProSidebar>
     </Box>

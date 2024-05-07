@@ -37,7 +37,7 @@ function App() {
             <Topbar />
             
             <Routes>
-              <Route path ='/' element={Dashboard}/>
+              <Route path ='/' element={<Dashboard/>}/>
               {/* <Route path ='/leaderboard' element={Leaderboard}/> */}
               {/* <Route path ='/teams' element={Teams}/> */}
               {/* <Route path ='/upcomingcontests' element={UpcomingContests}/> */}
