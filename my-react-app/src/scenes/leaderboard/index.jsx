@@ -6,6 +6,21 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import MenuHeader from "../../components/MenuHeader";
+import { fetchLeaderboardData } from "../../data/participantData.js";
+
+const fetchData = async () => {
+  try {
+    const data = await fetchLeaderboardData();
+    if (data) {
+      console.log(data);
+    } else {
+      setError('Failed to fetch leaderboard data');
+    }
+  } catch (error) {
+    setError('Error fetching leaderboard data');
+  }
+};
+
 
 const Leaderboard = () => {
   const theme = useTheme();
