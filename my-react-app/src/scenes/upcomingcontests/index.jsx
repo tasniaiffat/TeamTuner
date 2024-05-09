@@ -79,6 +79,16 @@ const UpcomingContests = () => {
 
             setShowModal(false);
           }}
+
+          PaperProps={{
+            sx: {
+              backgroundColor: colors.blueAccent[700],
+              color: colors.primary[600],
+              p: 2,
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+            }
+          }}
         >
           <DialogTitle>Add New Contest</DialogTitle>
           <DialogContent>
