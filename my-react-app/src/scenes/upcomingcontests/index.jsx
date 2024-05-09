@@ -75,7 +75,8 @@ const UpcomingContests = () => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
-            console.log(formJson.title, formJson.url);
+            console.log(formJson.title, formJson.url);//NEED TO CREATE NEW EVENT WITH THESE
+
             setShowModal(false);
           }}
         >

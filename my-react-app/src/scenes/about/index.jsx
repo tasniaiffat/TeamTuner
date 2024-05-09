@@ -6,8 +6,22 @@ const About = () => {
   return (
     <Box m ="20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
-      <MenuHeader title="TeamTuner" subtitle="A project by Tasnia Iffat and Farhan Ibne Shahid"/>
+      <MenuHeader title="About" subtitle=" TeamTuner"/>
+      
         </Box>
+        
+
+<Box
+  sx={{
+    position: 'absolute',
+    top: '50%',
+    left: '62%',
+    transform: 'translate(-50%, -50%)', // Adjusts to the exact center
+  }}
+>
+  <h3>A project by Tasnia Iffat and Farhan Ibne Shahid</h3>
+</Box>
+
       
     </Box>
   )
