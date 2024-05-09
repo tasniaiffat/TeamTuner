@@ -6,8 +6,23 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { tokens } from "../theme";
+import {
+    Box,
+    List,
+    ListItem,
+    ListItemText,
+    Typography,
+    colors,
+    useTheme,
+  } from "@mui/material";
+
 
 export default function FormDialog(selected) {
+
+    const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
   const [open, setOpen] = React.useState({selected});
 
   const handleClickOpen = () => {
@@ -27,6 +42,7 @@ export default function FormDialog(selected) {
     
     <React.Fragment>
       <Dialog
+       backgroundColor = {colors.greenAccent} 
         open={open}
         onClose={handleClose}
         PaperProps={{

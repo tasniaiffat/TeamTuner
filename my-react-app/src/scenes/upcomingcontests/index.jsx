@@ -16,30 +16,37 @@ import {
 import MenuHeader from "../../components/MenuHeader";
 import { tokens } from "../../theme";
 import FormDialog from "../../components/Dialog";
-
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 const UpcomingContests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [currentContests, setCurrentContests] = useState([]);
-  const [showModal,setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleDateClick = (selected) => {
     setShowModal(true);
-    
+    console.log("hello");
+
     const calendarApi = selected.view.calendar;
     calendarApi.unselect();
 
-    if (title) {
-      calendarApi.addEvent({
-        id: `${selected.dateStr}-${title}`,
-        title,
-        link:"url",
-        start: selected.startStr,
-        end: selected.endStr,
-        allDay: selected.allDay,
-      });
-    }
+    // if (title) {
+    //   calendarApi.addEvent({
+    //     id: `${selected.dateStr}-${title}`,
+    //     title,
+    //     link: "url",
+    //     start: selected.startStr,
+    //     end: selected.endStr,
+    //     allDay: selected.allDay,
+    //   });
+    // }
   };
 
   const handleEventClick = (selected) => {
@@ -52,18 +59,59 @@ const UpcomingContests = () => {
     }
   };
 
-  
-
   return (
     <Box m="20px">
-
-      {showModal && <FormDialog selected='true'/>}
-
       <MenuHeader
         title="Upcoming Contests"
         subtitle="Find all the upcoming contests in one place!"
       />
-      
+
+      {showModal && (
+        <Dialog
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          component="form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            console.log(formJson.title, formJson.url);
+            setShowModal(false);
+          }}
+        >
+          <DialogTitle>Add New Contest</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please enter the name and URL of the contest.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="title"
+              name="title"
+              label="Title of Contest"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              required
+              margin="dense"
+              id="url"
+              name="url"
+              label="URL of Contest"
+              type="url"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowModal(false)}>Cancel</Button>
+            <Button type="submit">Done</Button>
+          </DialogActions>
+        </Dialog>
+      )}
 
       <Box display="flex" justifyContent="space-between">
         {/* CALENDAR SIDEBAR */}
@@ -93,7 +141,8 @@ const UpcomingContests = () => {
                         year: "numeric",
                         month: "short",
                         day: "numeric",
-                      })} <a href={event.url}>Contest Link</a>
+                      })}{" "}
+                      <a href={event.url}>Contest Link</a>
                     </Typography>
                   }
                 />
@@ -103,7 +152,7 @@ const UpcomingContests = () => {
         </Box>
 
         {/* CALENDAR */}
-        <Box flex="1 1 100%" ml="15px" >
+        <Box flex="1 1 100%" ml="15px">
           <FullCalendar
             height="65vh"
             plugins={[
