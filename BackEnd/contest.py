@@ -62,8 +62,25 @@ class contest:
                 detail="Could Not Add Contest"
             )
     
+    @contestRouter.put("/contest/addAvailableContest")
+    async def AddContest(info: contestInfo):
+        try:
+            contest.add_data("allContests", f"{info.id}", {
+                "id" : info.id,
+                "date": info.date,
+                "time":info.time,
+                "oj" : info.oj,
+                "title" : info.title
+            })
+            
+            return JSONResponse(content={"message": "Added Successfully"})
+        except Exception:
+            raise HTTPException(
+                status_code=400,
+                detail="Could Not Add Contest"
+            )
     
-          
+    
     @contestRouter.put("/contest/RemoveContest")
     async def RemoveContest(info: contestInfo):
         try:

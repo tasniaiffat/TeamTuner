@@ -86,6 +86,27 @@ const AddContest = () => {
     };
   };
 
+  const addOfflineContest = async (item) => {
+    try {
+      const transformedItem = transformItem(item)
+      console.log(transformedItem)
+      
+      const response = await fetch("http://127.0.0.1:8000/contest/addAvailableContest", {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(transformedItem),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update backend');
+      }
+      updateBackend(item, 'added')
+    } catch (error) {
+      console.error('Error updating backend:', error);
+      // Handle error (e.g., show error message to the user)
+    }
+  };
 
   const updateBackend = async (item, category) => {
     try {
@@ -124,6 +145,8 @@ const AddContest = () => {
 
   // Helper function to format the list item's text
   const formatListItem = (item) => `${item.title} - ${item.date} ${item.time}`;
+
+  
 
   return (
     <>
@@ -199,7 +222,7 @@ const AddContest = () => {
             ))}
           </List>
         </nav>
-
+        
         <Tooltip title="Add Offline Contest" placement="top">
           <IconButton
             onClick={() => setShowModal(true)}
@@ -219,17 +242,45 @@ const AddContest = () => {
             open={showModal}
             onClose={() => setShowModal(false)}
             component="form"
-            onSubmit={(event) => {
+            onSubmit={async (event) => {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
+              
               const formJson = Object.fromEntries(formData.entries());
-              // Assuming formJson now includes title, date, and time
+              console.log(formJson)
+
+              const inputDate = formJson.date; // Your input date string
+              const dateObj = new Date(inputDate); // Parse the input date string
+              const formattedDate = dateObj.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: '2-digit',
+              });
+              
+              console.log(formattedDate)
+
+              const inputTime = formJson.time; // Your input time string
+
+              // Split the input time string into hours and minutes
+              const [hours24, minutes] = inputTime.split(':').map(Number);
+             
+              let hours12 = hours24 % 12;
+              hours12 = hours12 || 12; 
+
+              const period = hours24 >= 12 ? 'p.m.' : 'a.m.';
+            
+              const formattedTime = `${hours12}:${minutes < 10 ? '0' : ''}${minutes} ${period}`;
+
+              console.log(formattedTime);
+
               const newItem = {
-                id: new Date().getTime().toString(), // unique ID based on timestamp
+                id: formJson.ID, // unique ID based on timestamp
+                oj: "vjudge",
+                date: formattedDate,
+                time: formattedTime,
                 title: formJson.title,
-                date: formJson.date,
-                time: formJson.time,
               };
+              await addOfflineContest(newItem);
               setTopItems([...topItems, newItem]); // Add to top items list
               setShowModal(false);
             }}
@@ -254,6 +305,17 @@ const AddContest = () => {
                 id="title"
                 name="title"
                 label="Title of Contest"
+                type="text"
+                fullWidth
+                variant="outlined"
+              />
+              <TextField
+                autoFocus
+                required
+                margin="dense"
+                id="id"
+                name="ID"
+                label="ID"
                 type="text"
                 fullWidth
                 variant="outlined"
