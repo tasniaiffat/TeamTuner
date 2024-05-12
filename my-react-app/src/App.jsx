@@ -12,6 +12,7 @@ import UpcomingContests from "./scenes/upcomingcontests/index.jsx";
 import About from "./scenes/about/index.jsx";
 import AddContest from "./scenes/addcontest/index.jsx";
 import { tokens } from "./theme";
+import Teams from "./scenes/teams/index.jsx";
 // import Leaderboard from "./scenes/teams";
 // import UpcomingContests from "./scenes/upcomingcontests";
 // import Teams from "./scenes/teams";
@@ -46,7 +47,7 @@ function App() {
             <Routes>
               <Route path ='/' element={<Dashboard/>}/>
               <Route path ='/leaderboard' element={<Leaderboard/>}/>
-              {/* <Route path ='/teams' element={Teams}/> */}
+              <Route path ='/teams' element={<Teams/>}/>
               <Route path ='/upcomingcontests' element={<UpcomingContests/>}/>
               <Route path ='/about' element={<About/>}/>
               <Route path = '/addcontest' element={<AddContest/>}/>

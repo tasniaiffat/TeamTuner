@@ -5,7 +5,11 @@ import { Box } from '@mui/material';
 const About = () => {
   return (
     <Box m ="20px">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+   
+      <Box display="flex" justifyContent="space-between" alignItems="center"  sx={{
+      position: 'absolute',
+      left: '55%',
+    }}>
       <MenuHeader title="About" subtitle=" TeamTuner"/>
       
         </Box>
@@ -15,7 +19,7 @@ const About = () => {
   sx={{
     position: 'absolute',
     top: '50%',
-    left: '62%',
+    left: '59%',
     transform: 'translate(-50%, -50%)', // Adjusts to the exact center
   }}
 >

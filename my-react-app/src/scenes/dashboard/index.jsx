@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MenuHeader from '../../components/MenuHeader';
-import { Box, useTheme, Typography, Avatar, colors } from '@mui/material';
+import { Box, useTheme, Typography, Avatar, colors, Button, Tooltip, Modal, List, ListItem, ListItemText, Checkbox} from '@mui/material';
 import { tokens } from "../../theme";
 
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 
-
-
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+
+
 
   const dataCodeforces = {
     labels: ['Solved', 'Unsolved'],
@@ -18,7 +19,7 @@ const Dashboard = () => {
       {
         label: 'Codeforces Statistics',
         data: [65, 35], // Example data: 65% solved, 35% unsolved
-        backgroundColor: ['#4caf50', '#f44336'],
+        backgroundColor: [colors.greenAccent[600], colors.redAccent[600]],
         borderColor: ['#ffffff', '#ffffff'],
         borderWidth: 1,
       },
@@ -52,6 +53,8 @@ const Dashboard = () => {
   };
 
   
+
+  
   return (
     <Box m="20px" sx={{ overflowY: 'auto', backgroundColor: colors.primary}}>
 
@@ -70,7 +73,7 @@ const Dashboard = () => {
 
         {/* Information Section */}
         <Box>
-          <Typography variant="h3" color={colors.blueAccent[500]}>John Doe</Typography>
+          <Typography variant="h3" color={colors.blueAccent[400]}>John Doe</Typography>
           <Typography variant="h6">Institution: University of Dhaka</Typography>
           <Typography variant="h6">Batch: 27</Typography>
           <Typography variant="h6">Department: Computer Science and Engineering</Typography>
@@ -80,7 +83,7 @@ const Dashboard = () => {
       <Box display="flex" justifyContent="space-between" mt={4}>
         {/* Codeforces Statistics */}
         <Box flex={1} p={1} width={250} height={250}>
-          <Typography variant="h6" color={colors.textPrimary} gutterBottom>
+          <Typography ml= "30px" variant="h5" color={colors.blueAccent[400]} gutterBottom>
             Codeforces Statistics
           </Typography>
           <Pie data={dataCodeforces} />
@@ -88,7 +91,7 @@ const Dashboard = () => {
 
         {/* Codechef Statistics */}
         <Box flex={1} p={1} width={250} height={250}>
-          <Typography variant="h6" color={colors.textPrimary} gutterBottom>
+          <Typography ml= "40px" variant="h5" color={colors.blueAccent[400]} gutterBottom>
             Codechef Statistics
           </Typography>
           <Pie data={dataCodechef} />
@@ -96,7 +99,7 @@ const Dashboard = () => {
 
         {/* Atcoder Statistics */}
         <Box flex={1} p={1} width={250} height={250}>
-          <Typography variant="h6" color={colors.textPrimary} gutterBottom>
+          <Typography ml= "40px" variant="h5" color={colors.blueAccent[400]} gutterBottom>
             Atcoder Statistics
           </Typography>
           <Pie data={dataAtcoder} />
