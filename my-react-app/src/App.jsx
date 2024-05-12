@@ -37,22 +37,21 @@ function App() {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline style={{ backgroundColor: colors.primary[400]}}
- />
+        <CssBaseline style={{ backgroundColor: colors.primary[400] }} />
         <div className="app">
-        <Sidebar/>
+          <Sidebar />
           <main className="content">
             <Topbar />
-            
+
             <Routes>
-              <Route path ='/' element={<Dashboard/>}/>
-              <Route path ='/leaderboard' element={<Leaderboard/>}/>
-              <Route path ='/teams' element={<Teams/>}/>
-              <Route path ='/upcomingcontests' element={<UpcomingContests/>}/>
-              <Route path ='/about' element={<About/>}/>
-              <Route path = '/addcontest' element={<AddContest/>}/>
-              {/* <Route path = '/login' element={<Login/>}/>
-              <Route path = '/' element={<SignupBody/>}/> */}
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/teams" element={<Teams />} />
+              <Route path="/upcomingcontests" element={<UpcomingContests />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/addcontest" element={<AddContest />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<SignupBody />} />
             </Routes>
           </main>
         </div>

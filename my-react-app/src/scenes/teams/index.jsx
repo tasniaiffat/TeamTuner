@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
-import MenuHeader from '../../components/MenuHeader';
+import React, { useState } from "react";
+import MenuHeader from "../../components/MenuHeader";
 import {
-  Box, useTheme, Card, CardContent, Typography, Button, Tooltip, Modal, List, ListItem, ListItemText, Checkbox, TextField, Alert
-} from '@mui/material';
+  Box,
+  useTheme,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Tooltip,
+  Modal,
+  List,
+  ListItem,
+  ListItemText,
+  Checkbox,
+  TextField,
+  Alert,
+} from "@mui/material";
 import { tokens } from "../../theme";
 
 const Teams = () => {
@@ -11,15 +24,25 @@ const Teams = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedMembers, setSelectedMembers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [alertMessage, setAlertMessage] = useState('');
-  const [people, setPeople] = useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [people, setPeople] = useState([
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+  ]);
 
   // Mock data for teams
   const generatedTeams = [
-    { teamName: 'CSEDU Alpha', members: ['Ami', 'Bhat', 'Khabo'] },
-    { teamName: 'CSEDU Beta', members: ['Gulu', 'Gulu', 'Bulu'] },
-    { teamName: 'CSEDU Gamma', members: ['Boop', 'Moop', 'Loop'] }
+    { teamName: "CSEDU Alpha", members: ["Ami", "Bhat", "Khabo"] },
+    { teamName: "CSEDU Beta", members: ["Gulu", "Gulu", "Bulu"] },
+    { teamName: "CSEDU Gamma", members: ["Boop", "Moop", "Loop"] },
   ];
 
   const [createdTeams, setCreatedTeams] = useState([]);
@@ -46,10 +69,10 @@ const Teams = () => {
   // Function to add a new team if three members are selected
   const handleCreateTeam = () => {
     if (selectedMembers.length !== 3) {
-      setAlertMessage('Please select exactly three members!');
+      setAlertMessage("Please select exactly three members!");
       return;
     }
-    
+
     // Create a new team name dynamically
     const newTeamName = `Custom Team ${createdTeams.length + 1}`;
 
@@ -58,12 +81,14 @@ const Teams = () => {
     setCreatedTeams([...createdTeams, newTeam]);
 
     // Remove selected members from the available people list
-    const remainingPeople = people.filter((person) => !selectedMembers.includes(person));
+    const remainingPeople = people.filter(
+      (person) => !selectedMembers.includes(person)
+    );
     setPeople(remainingPeople);
 
     // Reset selection and close modal
     setSelectedMembers([]);
-    setAlertMessage('');
+    setAlertMessage("");
     setModalOpen(false);
   };
 
@@ -77,17 +102,17 @@ const Teams = () => {
     >
       <Box
         sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           bgcolor: colors.blueAccent[500],
           boxShadow: 24,
           p: 4,
-          borderRadius: '8px',
-          width: '700px',
-          maxHeight: '400px',
-          overflowY: 'auto'
+          borderRadius: "8px",
+          width: "700px",
+          maxHeight: "400px",
+          overflowY: "auto",
         }}
       >
         <Typography id="modal-modal-title" variant="h6" gutterBottom>
@@ -128,22 +153,30 @@ const Teams = () => {
   );
 
   return (
-    <Box m="20px" sx={{ overflowY: 'auto', backgroundColor: colors.primary, maxHeight: '80vh'}}>
+    <Box
+      m="20px"
+      sx={{
+        overflowY: "auto",
+        backgroundColor: colors.primary,
+        maxHeight: "80vh",
+        "::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+    >
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <MenuHeader title="Teams" subtitle="Top Teams of CSEDU!" />
         <Tooltip title="Create Team">
-  <Button 
-    onClick={() => setModalOpen(true)} 
-    variant="contained" 
-    color="primary" 
-    sx={{ marginRight: '10px' }}
-  >
-    Create Team
-  </Button>
-</Tooltip>
-
+          <Button
+            onClick={() => setModalOpen(true)}
+            variant="contained"
+            color="primary"
+            sx={{ marginRight: "10px" }}
+          >
+            Create Team
+          </Button>
+        </Tooltip>
       </Box>
-
       {/* Created Teams Cards (Announced Teams) */}
       {createdTeams.length > 0 && (
         <>
@@ -152,9 +185,21 @@ const Teams = () => {
           </Typography>
           <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
             {createdTeams.map((team, index) => (
-              <Card key={index} sx={{ width: 250, borderRadius: 4, backgroundColor: colors.primary[400] }}>
+              <Card
+                key={index}
+                sx={{
+                  width: 250,
+                  borderRadius: 4,
+                  backgroundColor: colors.primary[400],
+                }}
+              >
                 <CardContent>
-                  <Typography gutterBottom variant="h4" component="div" color={colors.blueAccent[400]}>
+                  <Typography
+                    gutterBottom
+                    variant="h4"
+                    component="div"
+                    color={colors.blueAccent[400]}
+                  >
                     {team.teamName}
                   </Typography>
                   <Typography variant="h5" color={colors.greenAccent[400]}>
@@ -171,16 +216,27 @@ const Teams = () => {
           </Box>
         </>
       )}
-
       {/* Initial Teams Cards (Teams by TeamTuner) */}
       <Typography variant="h3" gutterBottom mt={4} mb={2}>
         Teams by TeamTuner
       </Typography>
       <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
         {generatedTeams.map((team, index) => (
-          <Card key={index} sx={{ width: 250, borderRadius: 4, backgroundColor: colors.primary[400] }}>
+          <Card
+            key={index}
+            sx={{
+              width: 250,
+              borderRadius: 4,
+              backgroundColor: colors.primary[400],
+            }}
+          >
             <CardContent>
-              <Typography gutterBottom variant="h4" component="div" color={colors.blueAccent[400]}>
+              <Typography
+                gutterBottom
+                variant="h4"
+                component="div"
+                color={colors.blueAccent[400]}
+              >
                 {team.teamName}
               </Typography>
               <Typography variant="h5" color={colors.greenAccent[400]}>
@@ -195,10 +251,9 @@ const Teams = () => {
           </Card>
         ))}
       </Box>
-
       {teamModal} {/* Render the modal for creating teams */}
     </Box>
   );
-}
+};
 
 export default Teams;

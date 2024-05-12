@@ -10,7 +10,7 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
@@ -19,8 +19,8 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import GroupsIcon from '@mui/icons-material/Groups';
-import InfoIcon from '@mui/icons-material/Info';
+import GroupsIcon from "@mui/icons-material/Groups";
+import InfoIcon from "@mui/icons-material/Info";
 import TeamTuner from "../../assets/TeamTuner.png";
 
 //structure of each meny item
@@ -131,10 +131,9 @@ const Sidebar = () => {
 
           {/* {list all menu items here} */}
           <Box paddingLeft={isCollapsed ? undefined : "8%"}>
-
-          <Item
+            <Item
               title="Dashboard"
-              to="/"
+              to="/dashboard"
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -156,7 +155,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-<Item
+            <Item
               title="Add Contest"
               to="/addcontest"
               icon={<AddBoxIcon />}
@@ -172,15 +171,13 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-<Item
+            <Item
               title="About"
               to="/about"
               icon={<InfoIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-
-
           </Box>
         </Menu>
       </ProSidebar>

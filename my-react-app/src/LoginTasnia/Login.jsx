@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import "./Login.css";
-import { BiSolidUserCircle } from "react-icons/bi";
-import { FaLock } from "react-icons/fa";
+import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import Header from "../Header/Header";
+import { tokens } from "../theme";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -14,17 +15,16 @@ function Login() {
   });
 
   async function handleSubmit(event) {
-    console.log(formData);
-    const SendformData = formData;
-    console.log(SendformData);
     event.preventDefault();
+    console.log("Form Data:", formData);
+
     try {
       const response = await fetch("http://127.0.0.1:8000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(SendformData),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -32,15 +32,13 @@ function Login() {
       }
 
       const data = await response.json();
-      console.log(data); // Log success message or handle response as needed
+      console.log(data); // Log the response or handle accordingly
     } catch (error) {
-      console.error("Error:", error);
-      toast.error(error.message); // Display error message using toast notification
+      console.error("Error:", error.message);
     }
   }
 
-  async function handleChange(event) {
-    console.log(formData);
+  function handleChange(event) {
     const { name, value } = event.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -48,56 +46,89 @@ function Login() {
     }));
   }
 
-  async function handleRegisterLink(event) {
-    console.log("User does not have an account");
+  function handleRegisterLink() {
     navigate("..");
   }
-  return (
-    <>
-      <div className="wrapper">
-        <form onSubmit={handleSubmit}>
-          <Header />
-          <h2>Login</h2>
-          <div className="input-box">
-            <BiSolidUserCircle className="icon" />
-            <input
-              type="email"
-              id="Email"
-              placeholder="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
 
-          <div className="input-box">
-            <FaLock className="icon" />
-            <input
-              type="password"
-              id="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              minLength="8"
-            />
-          </div>
-          <div className="remember-forgot">
-            <label>
-              <input type="checkbox"></input>Remember Me
-            </label>
-            <a href="#">Forgot Password?</a>
-          </div>
-          <button type="submit">Login</button>
-          <div className="register-link" onClick={handleRegisterLink}>
-            <p>
-              Don't have an account? <a href="#">Register</a>
-            </p>
-          </div>
-        </form>
-      </div>
-    </>
+  return (
+    <Box
+      m="20px"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        mt: 4,
+        maxWidth: 500,
+        maxHeight: 500,
+        margin: "auto",
+        overflowY: "auto",
+        maxHeight: "80vh",
+        "::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+    >
+      <Header />
+      <Typography variant="h4" gutterBottom>
+        Login
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        {[
+          { label: "Email Address", name: "email", type: "email" },
+          { label: "Password", name: "password", type: "password" }
+        ].map(({ label, name, type }) => (
+          <TextField
+            key={name}
+            label={label}
+            name={name}
+            type={type}
+            value={formData[name]}
+            onChange={handleChange}
+            required
+            margin="normal"
+            fullWidth
+            sx={{
+              backgroundColor: "transparent", // Transparent background
+              input: { color: colors.grey[100] }, // Adjust text color
+              ".MuiInputLabel-root": { color: colors.grey[300] }, // Label color
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: colors.grey[300], // Border color
+                },
+                "&:hover fieldset": {
+                  borderColor: colors.grey[100], // Hover state color
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: colors.blueAccent[400], // Focused state color
+                },
+              },
+            }}
+          />
+        ))}
+
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            mt: 2,
+            mb: 2,
+            ml: 27,
+            backgroundColor: colors.blueAccent[400],
+            color: colors.grey[100],
+            "&:hover": {
+              backgroundColor: colors.blueAccent[800], // Hover state color
+            },
+          }}
+        >
+          Login
+        </Button>
+      </form>
+      <Box className="register-link" onClick={handleRegisterLink}>
+        <Typography>
+          Don't have an account? <a href="#">Register</a>
+        </Typography>
+      </Box>
+    </Box>
   );
 }
 
