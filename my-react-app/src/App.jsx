@@ -11,6 +11,7 @@ import Leaderboard from "./scenes/leaderboard/index.jsx";
 import UpcomingContests from "./scenes/upcomingcontests/index.jsx";
 import About from "./scenes/about/index.jsx";
 import AddContest from "./scenes/addcontest/index.jsx";
+import { tokens } from "./theme";
 // import Leaderboard from "./scenes/teams";
 // import UpcomingContests from "./scenes/upcomingcontests";
 // import Teams from "./scenes/teams";
@@ -31,10 +32,12 @@ import AddContest from "./scenes/addcontest/index.jsx";
 
 function App() {
   const [theme, colorMode] = useMode();
+  const colors = tokens(theme.palette.mode);
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
+        <CssBaseline style={{ backgroundColor: colors.primary[400]}}
+ />
         <div className="app">
         <Sidebar/>
           <main className="content">
@@ -47,6 +50,8 @@ function App() {
               <Route path ='/upcomingcontests' element={<UpcomingContests/>}/>
               <Route path ='/about' element={<About/>}/>
               <Route path = '/addcontest' element={<AddContest/>}/>
+              {/* <Route path = '/login' element={<Login/>}/>
+              <Route path = '/' element={<SignupBody/>}/> */}
             </Routes>
           </main>
         </div>

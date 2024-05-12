@@ -132,6 +132,8 @@ const UpcomingContests = () => {
           p="10px"
           borderRadius="4px"
           height="65vh"
+          // ml="10px"
+          // maxWidth="150px"
         >
           <Typography variant="h5">Contests</Typography>
           <List>
@@ -166,6 +168,7 @@ const UpcomingContests = () => {
         <Box flex="1 1 100%" ml="15px">
           <FullCalendar
             height="65vh"
+            ml="10px"
             plugins={[
               dayGridPlugin,
               timeGridPlugin,
