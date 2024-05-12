@@ -10,6 +10,7 @@ import Dashboard from "./scenes/dashboard";
 import Leaderboard from "./scenes/leaderboard/index.jsx";
 import UpcomingContests from "./scenes/upcomingcontests/index.jsx";
 import About from "./scenes/about/index.jsx";
+import AddContest from "./scenes/addcontest/index.jsx";
 // import Leaderboard from "./scenes/teams";
 // import UpcomingContests from "./scenes/upcomingcontests";
 // import Teams from "./scenes/teams";
@@ -43,8 +44,9 @@ function App() {
               <Route path ='/' element={<Dashboard/>}/>
               <Route path ='/leaderboard' element={<Leaderboard/>}/>
               {/* <Route path ='/teams' element={Teams}/> */}
-              <Route path ='/contests' element={<UpcomingContests/>}/>
+              <Route path ='/upcomingcontests' element={<UpcomingContests/>}/>
               <Route path ='/about' element={<About/>}/>
+              <Route path = '/addcontest' element={<AddContest/>}/>
             </Routes>
           </main>
         </div>
