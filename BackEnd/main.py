@@ -19,11 +19,12 @@ app.add_middleware(
 )
 
 # app.include_router(signupAndLogin.signupAndLoginRouter)
-# app.include_router(contest.contestRouter)
+app.include_router(contest.contestRouter)
 # app.include_router(codeforcesAPI.codeforcesAPIRouter)
 # app.include_router(atcoderAPI.atcoderAPIRouter)
 # app.include_router(codechefAPI.codechefAPIRouter)
-app.include_router(leaderboardData.leaderboardDataRouter)
+# app.include_router(leaderboardData.leaderboardDataRouter)
+
 
 
 if __name__ == "__main__":
@@ -32,3 +33,4 @@ if __name__ == "__main__":
     # print(len(upcoming_contests))
     # solve_count = atcoderAPI.atcoderAPI.fetchContestResult("abc351", "Farhan188")
     # print(solve_count)
+    

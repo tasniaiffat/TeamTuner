@@ -32,35 +32,19 @@ const AddContest = () => {
   const [showModal, setShowModal] = useState(false);
 
   // Initial data
-  const [topItems, setTopItems] = useState([
-    {
-      id: "cf-div3",
-      title: "Codeforces Div 3",
-      date: "13 May, 2024",
-      time: "8:30 p.m.",
-    },
-    {
-      id: "cf-div2",
-      title: "Codeforces Div 2",
-      date: "14 May, 2024",
-      time: "9:00 a.m.",
-    },
-  ]);
+  const [topItems, setTopItems] = useState([]);
 
-  const [bottomItems, setBottomItems] = useState([
-    {
-      id: "cf-div1",
-      title: "Codeforces Div 1",
-      date: "15 May, 2024",
-      time: "6:00 p.m.",
-    },
-    {
-      id: "cf-div4",
-      title: "Codeforces Div 4",
-      date: "16 May, 2024",
-      time: "7:00 a.m.",
-    },
-  ]);
+  const [bottomItems, setBottomItems] = useState([]);
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/contest/listContest')
+      .then(response => response.json())
+      .then(data => {
+        setTopItems(data.added_contests);
+        setBottomItems(data.not_added_contests);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []); 
 
   // Function to parse date and time strings into a JavaScript Date object
   const parseDateTime = (dateStr, timeStr) => {
@@ -85,9 +69,57 @@ const AddContest = () => {
 
   // Move items between the two lists
   const moveItem = (item, from, to, setFrom, setTo) => {
+
+    updateBackend(item, to === topItems ? 'added' : 'not_added');
     const filteredItems = from.filter((i) => i.id !== item.id);
     setFrom(sortByDateTime(filteredItems));
     setTo(sortByDateTime([...to, item]));
+  };
+
+  const transformItem = (item) => {
+    return {
+      "id": item.id,
+      "oj": item.oj,
+      "date": item.date,
+      "time": item.time,
+      "title": item.title
+    };
+  };
+
+
+  const updateBackend = async (item, category) => {
+    try {
+      const transformedItem = transformItem(item)
+      console.log(transformedItem)
+      if(category=='added'){
+          const response = await fetch("http://127.0.0.1:8000/contest/addContest", {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(transformedItem),
+          });
+          if (!response.ok) {
+            throw new Error('Failed to update backend');
+          }
+      }
+      else{
+        const response = await fetch("http://127.0.0.1:8000/contest/RemoveContest", {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(transformedItem),
+          });
+          if (!response.ok) {
+            throw new Error('Failed to update backend');
+          }
+      }
+        
+    } catch (error) {
+      console.error('Error updating backend:', error);
+      // Handle error (e.g., show error message to the user)
+    }
   };
 
   // Helper function to format the list item's text
@@ -141,7 +173,7 @@ const AddContest = () => {
               variant="h5"
               gutterBottom
             >
-              Removed Contests
+              Available Contests
             </Typography>
             {bottomItems.map((item) => (
               <ListItem key={item.id} disablePadding>

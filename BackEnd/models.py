@@ -36,9 +36,12 @@ class participantInfo(BaseModel):
     penalty: int
 
 class contestInfo(BaseModel):
-    dateAndTime: str
-    type: str
+    id: str
     oj: str
+    date: str
+    time: str
+    title: str
+   
     
 class judgeInformation(BaseModel):
     atcoder: str
