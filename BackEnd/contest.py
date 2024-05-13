@@ -44,9 +44,12 @@ class contest:
             )
         
     
+    
+    
     @contestRouter.put("/contest/addContest")
     async def AddContest(info: contestInfo):
         try:
+            
             contest.add_data("AddedContest", f"{info.id}", {
                 "id" : info.id,
                 "date": info.date,
@@ -63,7 +66,7 @@ class contest:
             )
     
     @contestRouter.put("/contest/addAvailableContest")
-    async def AddContest(info: contestInfo):
+    async def AddAvailableContest(info: contestInfo):
         try:
             contest.add_data("allContests", f"{info.id}", {
                 "id" : info.id,
@@ -137,6 +140,7 @@ class contest:
             added_contests = []
             not_added_contests = []
             for contests in all_contests:
+                
                 contest_id = contests["id"]
                 if contest_id not in added_contest_ids:
                    
@@ -164,6 +168,3 @@ class contest:
         except Exception as e:
             return JSONResponse(content={"message": str(e)})
             
-
-# ans = contest.get_all_data("allContests")
-# print(ans)

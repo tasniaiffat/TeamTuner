@@ -6,17 +6,17 @@ const puppeteer = require('puppeteer');
 
   await page.goto('https://www.codechef.com/contests');
 
-  await page.waitForSelector("._flex__container_ioa8k_502");
+  await page.waitForSelector("._flex__container_1idej_522");
 
   const grabContests = await page.evaluate(() => {
 
-    const contests = document.querySelectorAll("._flex__container_ioa8k_502");
+    const contests = document.querySelectorAll("._flex__container_1idej_522");
     
 
     const matchingContests = [];
     
     contests.forEach(contest => {
-        if (contest.querySelector('._timer__container_ioa8k_561')) {
+        if (contest.querySelector('._timer__container_1idej_581')) {
             
             matchingContests.push(contest.innerHTML);
           }
@@ -29,3 +29,5 @@ const puppeteer = require('puppeteer');
   console.log(grabContests)
   await browser.close();
 })();
+
+

@@ -12,16 +12,17 @@ def codechefUpcomingContest():
         html_content = subprocess.check_output(['node', 'upcomingContestScrape.js'])
 
         soup = BeautifulSoup(html_content, 'lxml')
-
+        # print(soup)
         upcoming_contests = soup.find_all("a")
 
         contest_info = []
 
         for contest in upcoming_contests:
+            id = contest['href'].split('/')[-1]
             href_value = contest['href']
             dateAndTime = codechefContestTimeFinder.timeFinder(href_value)
             # print(contest.text + '----' + dateAndTime)
-            contest_info[contest.text] = dateAndTime
+            contest_info.append({"id":id, "title": contest.text , "dateAndTime" : dateAndTime})
 
         return contest_info
 
@@ -46,3 +47,6 @@ def codechefSolveCount(url):
     
     except Exception as e:
         print({"message" : str(e)})
+        
+
+print(codechefUpcomingContest())

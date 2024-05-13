@@ -19,8 +19,8 @@ def atcoderUpcomingContests():
             if contest_id_link.startswith("/contests"):
                 # continue
                 contest_id = contest_id_link.split('/')[-1]
-                # print(contest_id)
-                contests[contest_id] = lastDateAndTime
+                contest_title = link.text
+                contests[contest_id] = {lastDateAndTime, contest_title}
                 
             else:
                 # print(link.text)
@@ -38,4 +38,3 @@ def atcoderUpcomingContests():
     except Exception as e:
         return {"error" : str(e)}
     
-        

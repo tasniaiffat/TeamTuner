@@ -148,7 +148,7 @@ const Sidebar = ({username, isAdmin}) => {
             />
 
             <Item
-              title="Upcoming Contests"
+              title="Contests"
               to="/upcomingcontests"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}

@@ -3,6 +3,7 @@ import firebase_admin.firestore
 import pyrebase
 import models
 import time
+import datetime
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -18,6 +19,8 @@ atcoderAPIRouter = APIRouter()
 
 class atcoderAPI:
 
+    contest_db = firestore.client()
+    
     def fetchUpcomingContests():
         
         try:
@@ -79,3 +82,32 @@ class atcoderAPI:
                 
         except Exception as e:
             return {"error" : str(e)}
+        
+    
+    def format_datetime(unix_time):
+        local_time = datetime.datetime.fromtimestamp(unix_time)
+        formatted_date = local_time.strftime("%d %B, %Y")  # Format date as "12 May, 2021"
+        formatted_time = local_time.strftime("%I:%M %p").lower()   # Format time as "12:00 AM"
+        return formatted_date, formatted_time   
+    
+    def addUpcomingContest():
+        try:
+            upcoming_contests = atcoderAPI.fetchUpcomingContests()
+            for contest_id, contest_info in upcoming_contests.items():
+                timestamp, contest_name = contest_info
+                unix_time = timestamp
+                date, time = atcoderAPI.format_datetime(unix_time)
+                document = atcoderAPI.contest_db.collection("allContests").document(contest_id)
+                document.set({
+                    "id" : contest_id,
+                    "oj" : "Atcoder",
+                    "date" : date,
+                    "time" : time,
+                    "title" : contest_name
+                })
+
+            return {"message": "done"}
+        except Exception as e:
+            return {"message": str(e)}
+
+print(atcoderAPI.addUpcomingContest())
