@@ -249,15 +249,21 @@ const AddContest = () => {
               const formJson = Object.fromEntries(formData.entries());
               console.log(formJson)
 
-              const inputDate = formJson.date; // Your input date string
-              const dateObj = new Date(inputDate); // Parse the input date string
-              const formattedDate = dateObj.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: '2-digit',
-              });
+              const inputDate = formJson.date; 
+              const dateObj = new Date(inputDate);
+
+            
+              const day = dateObj.getDate();
+              const monthIndex = dateObj.getMonth();
+              const year = dateObj.getFullYear();
+
               
-              console.log(formattedDate)
+              const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+              ];
+              
+              const formattedDate = `${day} ${monthNames[monthIndex]}, ${year}`;
 
               const inputTime = formJson.time; // Your input time string
 

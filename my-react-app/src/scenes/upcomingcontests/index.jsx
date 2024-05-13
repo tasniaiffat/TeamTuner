@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -24,18 +25,92 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
+
 const UpcomingContests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [currentContests, setCurrentContests] = useState([]);
+  const [contestEvents, setContestEvents] = useState([]);
+
+useEffect(() => {
+  const fetchContestData = async () => {
+    try {
+      const today = new Date()
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      const formattedToday = today.toLocaleDateString('en-US', options);
+      // Split the formatted date by space
+      const parts = formattedToday.split(' ');
+      const formattedDate = `${parts[1]} ${parts[0]}, ${parts[2]}`;
+      const formattedDateWithoutComma = formattedDate.replace(',', '');
+      console.log(formattedDateWithoutComma); // Output: "16 May, 2024"
+      const response = await getContestOnDate(formattedDateWithoutComma);
+      console.log(response);
+      if (response && response.Contests) {
+        const events = response.Contests.map(contest => ({
+          id: contest.id,
+          title: contest.title,
+          date: contest.date,
+          time: contest.time,
+        }));
+        setContestEvents(events);
+    }} 
+    catch (error) {
+      console.error('Error fetching contest data:', error);
+    }
+  };
+  fetchContestData();
+}, []);
+
   const [showModal, setShowModal] = useState(false);
 
-  const handleDateClick = (selected) => {
-    setShowModal(true);
-    console.log("hello");
+  const getContestOnDate = async (formattedDate) => {
+    try {
+      const queryParams = { date: formattedDate };
+      const encodedParams = Object.keys(queryParams)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+        .join('&');
+  
+      const baseUrl = 'http://127.0.0.1:8000/contest/contestOnDate';
+      const completeUrl = `${baseUrl}?${encodedParams}`;
+  
+      const response = await fetch(completeUrl);
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  };
+  
 
-    const calendarApi = selected.view.calendar;
-    calendarApi.unselect();
+  const handleDateClick =  async (selectInfo) => {
+    // setShowModal(true);
+    const selectedDate = selectInfo.start;
+    const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const date = selectedDate.getDate();
+  const monthIndex = selectedDate.getMonth();
+  const year = selectedDate.getFullYear();
+
+  const formattedDate = `${date} ${monthNames[monthIndex]}, ${year}`;
+
+  console.log("Selected date:", formattedDate);
+
+  try {
+    const contestData = await getContestOnDate(formattedDate);
+    setContestEvents(contestData.Contests); // Assuming contestData is an object with a Contests array
+  } catch (error) {
+    console.error('Error fetching contest data:', error);
+  }
+
+    // const calendarApi = selectInfo.view.calendar;
+    // calendarApi.unselect();
 
     // if (title) {
     //   calendarApi.addEvent({
@@ -137,31 +212,26 @@ const UpcomingContests = () => {
         >
           <Typography variant="h5">Contests</Typography>
           <List>
-            {currentContests.map((event) => (
-              <ListItem
-                key={event.id}
-                sx={{
-                  backgroundColor: colors.greenAccent[500],
-                  margin: "10px 0",
-                  borderRadius: "2px",
-                }}
-              >
-                <ListItemText
-                  primary={event.title}
-                  secondary={
-                    <Typography>
-                      {formatDate(event.start, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}{" "}
-                      <a href={event.url}>Contest Link</a>
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            ))}
-          </List>
+          {contestEvents.map((event) => (
+            <ListItem
+              key={event.id}
+              sx={{
+                backgroundColor: colors.greenAccent[500],
+                margin: "10px 0",
+                borderRadius: "2px",
+              }}
+            >
+              <ListItemText
+                primary={event.title}
+                secondary={
+                  <Typography>
+                    {event.time} {/* Display the time */}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          ))}
+        </List>
         </Box>
 
         {/* CALENDAR */}
@@ -186,22 +256,23 @@ const UpcomingContests = () => {
             selectMirror={true}
             dayMaxEvents={true}
             select={handleDateClick}
-            eventClick={handleEventClick}
-            eventsSet={(events) => setCurrentContests(events)}
-            initialEvents={[
-              {
-                id: "12315",
-                title: "All-day event",
-                url: "https://codeforces.com/contest/1970",
-                date: "2022-09-14",
-              },
-              {
-                id: "5123",
-                title: "Timed event",
-                url: "https://codeforces.com/contest/1970",
-                date: "2022-09-28",
-              },
-            ]}
+            events={contestEvents}
+            // eventClick={handleEventClick}
+            // eventsSet={(events) => setCurrentContests(events)}
+            // initialEvents={[
+            //   {
+            //     id: "12315",
+            //     title: "All-day event",
+            //     url: "https://codeforces.com/contest/1970",
+            //     date: "2022-09-14",
+            //   },
+            //   {
+            //     id: "5123",
+            //     title: "Timed event",
+            //     url: "https://codeforces.com/contest/1970",
+            //     date: "2022-09-28",
+            //   },
+            // ]}
           />
         </Box>
       </Box>
@@ -210,3 +281,11 @@ const UpcomingContests = () => {
 };
 
 export default UpcomingContests;
+
+
+
+
+
+
+
+

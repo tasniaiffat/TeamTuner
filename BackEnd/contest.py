@@ -149,7 +149,21 @@ class contest:
         except Exception as e:
             return JSONResponse(content={"message": str(e)})
             
+    
+    @contestRouter.get("/contest/contestOnDate")
+    async def findContestOnDate(date):
+        try:
+            collection_ref = contest.contest_db.collection('AddedContest')
+            query = collection_ref.where('date',  '==',  date).get()
+            contestsOnDate = []
+            for contests in query:
+                contestsOnDate.append(contests.to_dict())
+                
+            return JSONResponse(content={"Contests": contestsOnDate})
         
+        except Exception as e:
+            return JSONResponse(content={"message": str(e)})
+            
 
-ans = contest.get_all_data("allContests")
-print(ans)
+# ans = contest.get_all_data("allContests")
+# print(ans)

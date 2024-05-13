@@ -41,7 +41,10 @@ class contestInfo(BaseModel):
     date: str
     time: str
     title: str
-   
+
+
+class contestOnDate(BaseModel):
+    date : str   
     
 class judgeInformation(BaseModel):
     atcoder: str
