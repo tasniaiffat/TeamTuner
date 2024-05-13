@@ -25,8 +25,9 @@ async def run_scrapers():
         print("Hello")
         await codeforcesAPI.codeforcesAPI.addUpcomingContest()
         await atcoderAPI.atcoderAPI.addUpcomingContest()
+        await codechefAPI.codechefAPI.addUpcomingContest()
         # Wait for a specific time interval (e.g., 24 hours) before running the scraper again
-        await asyncio.sleep(60)
+        await asyncio.sleep(600)
 
 app.include_router(signupAndLogin.signupAndLoginRouter)
 app.include_router(contest.contestRouter)

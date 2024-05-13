@@ -106,7 +106,7 @@ class atcoderAPI:
                     "title" : contest_name
                 })
 
-            return {"message": "done"}
+            # return {"message": "done"}
         except Exception as e:
             return {"message": str(e)}
 
