@@ -33,7 +33,7 @@ class atcoderAPI:
     def fetchContestResult(contest_id, handle):
         epoch_time_now = int(time.time())
         Contest_URL = "https://kenkoooo.com/atcoder/resources/contests.json"
-        Submission_URL = "https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=chokudai&from_second=1560046356"
+        # Submission_URL = "https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=chokudai&from_second=1560046356"
         
         try:
             time_period = 5*24*60*60
@@ -110,4 +110,72 @@ class atcoderAPI:
         except Exception as e:
             return {"message": str(e)}
 
-print(atcoderAPI.addUpcomingContest())
+    def addContestantInfo():
+        try:
+            
+            today = datetime.date.today()
+
+            # Calculate the date 5 days ago
+            five_days_ago = today - datetime.timedelta(days=5)
+
+            # List to store the dates as strings
+            date_strings = []
+
+            # Iterate over the last 5 days and convert them to strings
+            for i in range(5):
+                # Calculate the date for the current iteration
+                current_date = five_days_ago + datetime.timedelta(days=i)
+                
+                # Convert the date to string in the desired format
+                date_string = current_date.strftime("%d %B, %Y")
+                
+                # Append the string to the list
+                date_strings.append(date_string)
+
+            # Print the list of date strings
+            print(date_strings)
+            
+            query = atcoderAPI.contest_db.collection("AddedContest").where("date", "in", date_strings).where("oj", "==", "Atcoder").get()
+            
+            contest_dict = []
+            users = []
+            contest_id = []
+            
+            for doc in query:
+                contest_dict.append(doc.to_dict())
+                # print(doc.to_dict())
+                
+            # print(contest_dict)
+            for doc in contest_dict:
+                contest_id.append(doc["id"])
+            
+            query = atcoderAPI.contest_db.collection("Judge Information").stream()
+            
+            for doc in query:
+                uid = doc.id
+                doc_data = doc.to_dict()
+                handle = doc_data["AtcoderHandle"]
+                # print(uid + " " + handle)
+                users.append({"uid" : uid, "handle" : handle})
+            
+            for contest in contest_id:
+                for user in users:
+                    # print(user["handle"] + " " + contest)
+                    ac_count = atcoderAPI.fetchContestResult(contest, user["handle"]) 
+                    # print(ac_count)
+                    print(user["handle"] + " " + contest + " " + str(ac_count))
+                    
+                    uid = contest + " " + user["uid"]
+                    document = atcoderAPI.contest_db.collection("Contest Result").document(uid)
+                    document.set({
+                        "id" : contest,
+                        "email" : user["uid"],
+                        "type" : "Atcoder",
+                        "solved" : str(ac_count)
+                    })
+                    
+        except Exception as e:
+            return {"message" : str(e)}
+        
+    
+print(atcoderAPI.addContestantInfo())

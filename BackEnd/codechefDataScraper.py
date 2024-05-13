@@ -40,7 +40,7 @@ def codechefSolveCount(url):
         cnt  = 0
 
         for solve in solves:
-            if(solve.text>="100"):
+            if(solve.text>"0"):
                 cnt = cnt+1
 
         return cnt
