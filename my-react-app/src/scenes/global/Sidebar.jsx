@@ -42,7 +42,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
-const Sidebar = () => {
+const Sidebar = ({username, isAdmin}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setCollapsed] = useState(false);
@@ -116,14 +116,14 @@ const Sidebar = () => {
                   sx={{ m: "10px 0 0 0" }}
                   //link username here
                 >
-                  USERNAME
+                  {username}
                 </Typography>
                 <Typography
                   variant="h5"
                   color={colors.greenAccent[500]}
                   //link user type here
                 >
-                  STUDENT/ADMIN
+                  {isAdmin ? "ADMIN" : "STUDENT"}
                 </Typography>
               </Box>
             </Box>

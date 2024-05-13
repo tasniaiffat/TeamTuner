@@ -53,14 +53,14 @@ function Signup(){
             
             toast.success('User account created successfully');
             
-            navigate('./login');
+            navigate("/");
 
         } catch (error) {
             console.error('Error:', error);
         }
 
         //testing. delete the following line later
-        navigate('./login');
+        navigate("/");
     };
 
     async function handleChange (event){
@@ -74,7 +74,7 @@ function Signup(){
 
       async function handleLoginLink(event){
         console.log('User already has an account');
-        navigate('./login');
+        navigate("/");
         // event.preventDefault();
         // try {
         //     console.log('Form Data:', formData);

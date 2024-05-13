@@ -17,7 +17,8 @@ class signupUser:
 
     signupUser = models.signupUser
     signupDatabase = firestore.client()
-
+    loginDatabase = firestore.client()
+    
     @staticmethod
     def add_data(collection_name, document_name, data):
         document = signupUser.signupDatabase.collection(collection_name).document(document_name)
@@ -78,9 +79,10 @@ class loginUser:
             
             # Verify email and password with Firebase authentication
             user = auth.sign_in_with_email_and_password(email, password)
-            
+            user_info = signupUser.loginDatabase.collection("Personal Information").document(email)
+            doc_snapshot = user_info.get()
             # If no exceptions are raised, authentication is successful
-            return JSONResponse(content={"message": "Login Successful"})
+            return JSONResponse(content={"message": "Login Successful", "user" : doc_snapshot.to_dict()})
         
         except Exception as e:
             # Log generic error message

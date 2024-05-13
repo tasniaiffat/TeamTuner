@@ -4,7 +4,7 @@ import Header from "../Header/Header";
 import { tokens } from "../theme";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Login({handleLogin, handleAdmin}) {
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -32,7 +32,10 @@ function Login() {
       }
 
       const data = await response.json();
-      console.log(data); // Log the response or handle accordingly
+      console.log(data);
+      handleLogin(data.user["Email"]);
+      if(data.user["Admin"]=="Yes")handleAdmin()
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -47,7 +50,7 @@ function Login() {
   }
 
   function handleRegisterLink() {
-    navigate("..");
+    navigate("/signup");
   }
 
   return (

@@ -53,7 +53,7 @@ function SignupBody() {
       }
 
       toast.success("User account created successfully");
-      navigate("./login");
+      navigate("/");
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred while creating the account");
@@ -69,7 +69,7 @@ function SignupBody() {
   }
 
   function handleLoginLink() {
-    navigate("./login");
+    navigate("/");
   }
 
   return (
