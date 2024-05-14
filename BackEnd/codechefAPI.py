@@ -31,7 +31,7 @@ class codechefAPI:
         
         
     def fetchContestResult(contest_id, type, handle):
-        URL = f'https://www.codechef.com/rankings/{contest_id}{type}?itemsPerPage=1&order=asc&page=1&search={handle}&sortBy=rank'
+        URL = f'https://www.codechef.com/rankings/{contest_id}{type}?filterBy=Institution%3DUniversity%20of%20Dhaka&itemsPerPage=1&order=asc&page=1&search={handle}&sortBy=rank'
         solved = codechefDataScraper.codechefSolveCount(URL)
         return solved
     

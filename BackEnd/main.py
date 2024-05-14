@@ -24,15 +24,14 @@ async def run_scrapers():
     while True:
         # Call your scraper function
         print("Hello")
-        # await codeforcesAPI.codeforcesAPI.addUpcomingContest()
-        # await atcoderAPI.atcoderAPI.addUpcomingContest()
-        # await codechefAPI.codechefAPI.addUpcomingContest()
-        # await codeforcesAPI.codeforcesAPI.addContestantInfo()
-        # await codechefAPI.codechefAPI.addContestantInfo()
-        # await atcoderAPI.atcoderAPI.addContestantInfo()
-        # await vjudgeAPI.vjudgeAPI.addContestantInfo()
-        # # Wait for a specific time interval (e.g., 24 hours) before running the scraper again
-        await asyncio.sleep(86400)
+        # codeforcesAPI.codeforcesAPI.addUpcomingContest()
+        # atcoderAPI.atcoderAPI.addUpcomingContest()
+        # codechefAPI.codechefAPI.addUpcomingContest()
+        # codeforcesAPI.codeforcesAPI.addContestantInfo()
+        # codechefAPI.codechefAPI.addContestantInfo()
+        # atcoderAPI.atcoderAPI.addContestantInfo()
+        # vjudgeAPI.vjudgeAPI.addContestantInfo()
+        await asyncio.sleep(1200)
         
 
 app.include_router(signupAndLogin.signupAndLoginRouter)
@@ -50,7 +49,7 @@ async def shutdown_event():
 async def startup_event():
     print("Application starting up")
     # Start the scraper loop when the application starts up
-    # asyncio.create_task(run_scrapers())
+    asyncio.create_task(run_scrapers())
 
 app.add_event_handler("startup", startup_event)
 app.add_event_handler("shutdown", shutdown_event)

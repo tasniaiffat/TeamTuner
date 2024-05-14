@@ -91,7 +91,7 @@ class codeforcesAPI:
                     "time" : time,
                     "title" : contests["name"]
                 })
-                # return {"message" : "Done"}
+                return {"message" : "Done"}
         except Exception as e:
             return {"message" : str(e)}
 
@@ -157,7 +157,7 @@ class codeforcesAPI:
                         "id" : contest,
                         "email" : user["uid"],
                         "type" : "Codeforces",
-                        "solved" : str(ac_count)
+                        "solved": str(ac_count) if isinstance(ac_count, int) else "0"
                     })
                     
         except Exception as e:

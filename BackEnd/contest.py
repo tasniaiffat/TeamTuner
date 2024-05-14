@@ -11,6 +11,8 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from fastapi import APIRouter
 from firebase import firestore_db, firebase
+from leaderboardData import leaderboardData
+from fastapi.responses import JSONResponse
 
 contestRouter = APIRouter()
 
@@ -19,6 +21,8 @@ class contest:
     participantInfo = models.participantInfo
     contestInfo = models.contestInfo
     contest_db = firestore.client()
+    team = models.team
+    deleteTeam = models.deleteTeam
     
     @staticmethod
     def add_data(collection_name, document_name, data):
@@ -174,6 +178,117 @@ class contest:
             return JSONResponse(content={"message": str(e)})
             
     
+    
+    @contestRouter.get("/contest/CreatedTeams")
+    async def CreatedTeams():
+        try:
+            teams = contest.get_all_data("Teams")
+            return JSONResponse(content={"teams" : teams})
+        
+        except Exception as e:
+            return JSONResponse(content={"message": str(e)})
+        
+    
+    @contestRouter.get("/contest/findMembers")
+    def findMembers():
+        try:
+            all_members = contest.get_all_data("Judge Information")
+            all_teams = contest.get_all_data("Teams")
+            
+            # print(all_teams)
+            
+            usedMemberSet = set()
+            remaining_members = []
+                
+            for team in all_teams:
+                usedMemberSet.add(team['Member 1'])
+                usedMemberSet.add(team['Member 2'])
+                usedMemberSet.add(team['Member 3'])
+
+
+            for member in all_members:
+                print(member["Email"])
+                if member["Email"] not in usedMemberSet:
+                    remaining_members.append(member["Email"])
+            
+            return JSONResponse(content={'remaining_members' : remaining_members})
+
+        except Exception as e:
+            return {"message" : str(e)}
+    
+    @contestRouter.put("/contest/addTeam")
+    def AddTeam(info: team):
+        try:
+            contest.add_data("Teams", info.name, {
+                "name" : info.name,
+                "Member 1" : info.member1,
+                "Member 2" : info.member2,
+                "Member 3" : info.member3,
+            })
+            
+            return JSONResponse(content={"message": "Added Successfully"})
+        except Exception:
+            raise HTTPException(
+                status_code=400,
+                detail="Could Not Add Contest"
+            )
+    
+    
+    
+
+    @contestRouter.get("/contest/generateTeams")
+    def generateTeams():
+        try:
+            leaderboard = leaderboardData.retrieveAndSort()
+            teams = {
+                "alpha": [],
+                "beta": [],
+                "gamma": []
+            }
+            
+            team_names = list(teams.keys())
+            current_team = 0
+            
+            while len(leaderboard) >= 3 and current_team < len(team_names):
+                # Assign members to the current team
+                teams[team_names[current_team]].extend([member[0] for member in leaderboard[:3]])
+                # Remove assigned members from the list
+                del leaderboard[:3]
+                current_team += 1
+            
+            all_teams = [{team.capitalize(): members} for team, members in teams.items()]
+
+            return JSONResponse(content={"teams" : all_teams})
+
+        
+        except Exception as e:
+            return {"message" : str(e)}
+
+    
+    @contestRouter.put("/contest/deleteTeam")
+    async def DeleteTeam(info: deleteTeam):
+        try:
+            collection_name = "Teams"
+            document_name = info.name
+                
+            document_ref = contest.contest_db.collection(collection_name).document(document_name)
+                
+            if not document_ref.get().exists:
+                raise HTTPException(status_code=404, detail="Contest not found")
+
+            document_ref.delete()
+            
+            print("Team removed successfully")
+                
+            return JSONResponse(content={"message": "Team removed successfully"})
+        
+        except HTTPException as http_error:
+            raise http_error
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            raise HTTPException(status_code=500, detail="Internal server error")
+    
+        
     @contestRouter.get("/contest/contestOnDate")
     async def findContestOnDate(date):
         try:
@@ -188,4 +303,6 @@ class contest:
         except Exception as e:
             return JSONResponse(content={"message": str(e)})
 
-print(contest.allUpcomingAddedContests())
+
+    
+print(contest.findMembers())

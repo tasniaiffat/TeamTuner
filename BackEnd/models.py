@@ -58,3 +58,12 @@ class contestWeight(BaseModel):
     cc_weight: float
     ac_weight: float
     vjudge_weight: float
+    
+class team(BaseModel):
+    member1 : str
+    member2 : str
+    member3 : str
+    name : str
+    
+class deleteTeam(BaseModel):
+    name : str

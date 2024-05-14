@@ -38,9 +38,6 @@ class leaderboardData:
 			
 			query = leaderboardData.db.collection('Contest Result')
 			result = query.stream()
-   
-
-			
 			cf_solve = {}
 			cc_solve = {}
 			ac_solve = {}
