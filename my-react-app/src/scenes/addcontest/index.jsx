@@ -37,14 +37,14 @@ const AddContest = () => {
   const [bottomItems, setBottomItems] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/contest/listContest')
-      .then(response => response.json())
-      .then(data => {
+    fetch("http://127.0.0.1:8000/contest/listContest")
+      .then((response) => response.json())
+      .then((data) => {
         setTopItems(data.added_contests);
         setBottomItems(data.not_added_contests);
       })
-      .catch(error => console.error('Error fetching data:', error));
-  }, []); 
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
   // Function to parse date and time strings into a JavaScript Date object
   const parseDateTime = (dateStr, timeStr) => {
@@ -69,8 +69,7 @@ const AddContest = () => {
 
   // Move items between the two lists
   const moveItem = (item, from, to, setFrom, setTo) => {
-
-    updateBackend(item, to === topItems ? 'added' : 'not_added');
+    updateBackend(item, to === topItems ? "added" : "not_added");
     const filteredItems = from.filter((i) => i.id !== item.id);
     setFrom(sortByDateTime(filteredItems));
     setTo(sortByDateTime([...to, item]));
@@ -78,67 +77,74 @@ const AddContest = () => {
 
   const transformItem = (item) => {
     return {
-      "id": item.id,
-      "oj": item.oj,
-      "date": item.date,
-      "time": item.time,
-      "title": item.title
+      id: item.id,
+      oj: item.oj,
+      date: item.date,
+      time: item.time,
+      title: item.title,
     };
   };
 
   const addOfflineContest = async (item) => {
     try {
-      const transformedItem = transformItem(item)
-      console.log(transformedItem)
-      
-      const response = await fetch("http://127.0.0.1:8000/contest/addAvailableContest", {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(transformedItem),
-      });
+      const transformedItem = transformItem(item);
+      console.log(transformedItem);
+
+      const response = await fetch(
+        "http://127.0.0.1:8000/contest/addAvailableContest",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(transformedItem),
+        }
+      );
       if (!response.ok) {
-        throw new Error('Failed to update backend');
+        throw new Error("Failed to update backend");
       }
-      updateBackend(item, 'added')
+      updateBackend(item, "added");
     } catch (error) {
-      console.error('Error updating backend:', error);
+      console.error("Error updating backend:", error);
       // Handle error (e.g., show error message to the user)
     }
   };
 
   const updateBackend = async (item, category) => {
     try {
-      const transformedItem = transformItem(item)
-      console.log(transformedItem)
-      if(category=='added'){
-          const response = await fetch("http://127.0.0.1:8000/contest/addContest", {
-            method: 'PUT',
+      const transformedItem = transformItem(item);
+      console.log(transformedItem);
+      if (category == "added") {
+        const response = await fetch(
+          "http://127.0.0.1:8000/contest/addContest",
+          {
+            method: "PUT",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify(transformedItem),
-          });
-          if (!response.ok) {
-            throw new Error('Failed to update backend');
           }
-      }
-      else{
-        const response = await fetch("http://127.0.0.1:8000/contest/RemoveContest", {
-            method: 'PUT',
+        );
+        if (!response.ok) {
+          throw new Error("Failed to update backend");
+        }
+      } else {
+        const response = await fetch(
+          "http://127.0.0.1:8000/contest/RemoveContest",
+          {
+            method: "PUT",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify(transformedItem),
-          });
-          if (!response.ok) {
-            throw new Error('Failed to update backend');
           }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to update backend");
+        }
       }
-        
     } catch (error) {
-      console.error('Error updating backend:', error);
+      console.error("Error updating backend:", error);
       // Handle error (e.g., show error message to the user)
     }
   };
@@ -146,11 +152,19 @@ const AddContest = () => {
   // Helper function to format the list item's text
   const formatListItem = (item) => `${item.title} - ${item.date} ${item.time}`;
 
-  
-
   return (
     <>
-      <Box m="20px" sx={{ bgcolor: colors.primary[400] }}>
+      <Box
+        m="20px"
+        sx={{
+          bgcolor: colors.primary[400],
+          overflowY: "auto",
+          maxHeight: "80vh",
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
         {/* Primary List */}
         <nav aria-label="primary task folders">
           <List>
@@ -222,7 +236,7 @@ const AddContest = () => {
             ))}
           </List>
         </nav>
-        
+
         <Tooltip title="Add Offline Contest" placement="top">
           <IconButton
             onClick={() => setShowModal(true)}
@@ -245,37 +259,47 @@ const AddContest = () => {
             onSubmit={async (event) => {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
-              
-              const formJson = Object.fromEntries(formData.entries());
-              console.log(formJson)
 
-              const inputDate = formJson.date; 
+              const formJson = Object.fromEntries(formData.entries());
+              console.log(formJson);
+
+              const inputDate = formJson.date;
               const dateObj = new Date(inputDate);
 
-            
               const day = dateObj.getDate();
               const monthIndex = dateObj.getMonth();
               const year = dateObj.getFullYear();
 
-              
               const monthNames = [
-                'January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
               ];
-              
+
               const formattedDate = `${day} ${monthNames[monthIndex]}, ${year}`;
 
               const inputTime = formJson.time; // Your input time string
 
               // Split the input time string into hours and minutes
-              const [hours24, minutes] = inputTime.split(':').map(Number);
-             
-              let hours12 = hours24 % 12;
-              hours12 = hours12 || 12; 
+              const [hours24, minutes] = inputTime.split(":").map(Number);
 
-              const period = hours24 >= 12 ? 'p.m.' : 'a.m.';
-            
-              const formattedTime = `${hours12}:${minutes < 10 ? '0' : ''}${minutes} ${period}`;
+              let hours12 = hours24 % 12;
+              hours12 = hours12 || 12;
+
+              const period = hours24 >= 12 ? "p.m." : "a.m.";
+
+              const formattedTime = `${hours12}:${
+                minutes < 10 ? "0" : ""
+              }${minutes} ${period}`;
 
               console.log(formattedTime);
 
