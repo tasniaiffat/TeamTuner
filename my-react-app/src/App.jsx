@@ -1,21 +1,26 @@
 // App.jsx
 
-import React, { useState, useEffect } from 'react';
-import { ColorModeContext, useMode } from './theme.js';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './LoginTasnia/Login.jsx';
-import SignupBody from './SignupBody/SignupBody.jsx';
-import Topbar from './scenes/global/Topbar.jsx';
-import Sidebar from './scenes/global/Sidebar.jsx';
-import Dashboard from './scenes/dashboard';
-import Leaderboard from './scenes/leaderboard/index.jsx';
-import UpcomingContests from './scenes/upcomingcontests/index.jsx';
-import About from './scenes/about/index.jsx';
-import AddContest from './scenes/addcontest/index.jsx';
-import { tokens } from './theme';
-import Teams from './scenes/teams/index.jsx';
-import GuestTopbar from './scenes/global/GuestTopbar.jsx';
+import React, { useState, useEffect } from "react";
+import { ColorModeContext, useMode } from "./theme.js";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./LoginTasnia/Login.jsx";
+import SignupBody from "./SignupBody/SignupBody.jsx";
+import Topbar from "./scenes/global/Topbar.jsx";
+import Sidebar from "./scenes/global/Sidebar.jsx";
+import Dashboard from "./scenes/dashboard";
+import Leaderboard from "./scenes/leaderboard/index.jsx";
+import UpcomingContests from "./scenes/upcomingcontests/index.jsx";
+import About from "./scenes/about/index.jsx";
+import AddContest from "./scenes/addcontest/index.jsx";
+import { tokens } from "./theme";
+import Teams from "./scenes/teams/index.jsx";
+import GuestTopbar from "./scenes/global/GuestTopbar.jsx";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -47,12 +52,16 @@ function App() {
     console.log(isAuthenticated);
   };
 
-  const handleAdmin = () =>{
-    setIsAdmin(true)
+  const handleAdmin = () => {
+    setIsAdmin(true);
     console.log(isAdmin);
   };
 
-
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setIsAdmin(false);
+    setUsername("Guest");
+  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -63,24 +72,27 @@ function App() {
           {/* <Sidebar username={username} isAdmin={isAdmin} /> */}
           <main className="content">
             {isAuthenticated && <Topbar />}
-            {!isAuthenticated && <GuestTopbar/>}
+            {!isAuthenticated && <GuestTopbar />}
 
             <Routes>
               <Route
                 path="/login"
-                element={<Login handleLogin={handleLogin} handleAdmin={handleAdmin} />}
+                element={
+                  <Login handleLogin={handleLogin} handleAdmin={handleAdmin} />
+                }
               />
-              <Route
-                path="/signup"
-                element={<SignupBody />}
-              />
+              <Route path="/signup" element={<SignupBody />} />
               <Route
                 path="/dashboard"
-                element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+                element={
+                  isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
+                }
               />
               <Route
                 path="/leaderboard"
-                element={isAuthenticated ? <Leaderboard /> : <Navigate to="/login" />}
+                element={
+                  isAuthenticated ? <Leaderboard /> : <Navigate to="/login" />
+                }
               />
               <Route
                 path="/teams"
@@ -88,10 +100,24 @@ function App() {
               />
               <Route
                 path="/upcomingcontests"
-                element={isAuthenticated ? <UpcomingContests /> : <Navigate to="/login" />}
+                element={
+                  isAuthenticated ? (
+                    <UpcomingContests />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
               />
-              <Route path="/about" element={isAuthenticated ? <About /> : <Navigate to="/login" />} />
-              <Route path="/addcontest" element={isAuthenticated ? <AddContest /> : <Navigate to="/login" />} />
+              <Route
+                path="/about"
+                element={isAuthenticated ? <About /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/addcontest"
+                element={
+                  isAuthenticated ? <AddContest /> : <Navigate to="/login" />
+                }
+              />
               {/* Redirect all other routes to login */}
               <Route path="*" element={<Navigate to="/login" />} />
             </Routes>

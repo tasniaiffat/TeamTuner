@@ -42,7 +42,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
-const Sidebar = ({username, isAdmin}) => {
+const Sidebar = ({ username, isAdmin }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setCollapsed] = useState(false);
@@ -155,13 +155,15 @@ const Sidebar = ({username, isAdmin}) => {
               setSelected={setSelected}
             />
 
-            {isAdmin && (<Item
-              title="Add Contest"
-              to="/addcontest"
-              icon={<AddBoxIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />)}
+            {isAdmin && (
+              <Item
+                title="Add Contest"
+                to="/addcontest"
+                icon={<AddBoxIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
 
             <Item
               title="Teams"

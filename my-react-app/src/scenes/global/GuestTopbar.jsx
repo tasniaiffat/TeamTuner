@@ -17,11 +17,9 @@ const GuestTopbar = () => {
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
-
-
       {/* {ICONS} */}
       <Box display="flex">
-      <IconButton onClick={colorMode.toggleColorMode}>
+        <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
             <DarkModeOutlinedIcon />
           ) : (
@@ -29,7 +27,7 @@ const GuestTopbar = () => {
           )}
         </IconButton>
 
-        {/*add leaderboard icon*/} 
+        {/*add leaderboard icon*/}
         {/* <IconButton>
           <NotificationsOutlinedIcon />
         </IconButton> */}
@@ -40,7 +38,6 @@ const GuestTopbar = () => {
           <PersonOutlinedIcon />
         </IconButton> */}
       </Box>
-      
     </Box>
   );
 };

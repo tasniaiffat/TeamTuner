@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
@@ -258,7 +259,7 @@ useEffect(() => {
             select={handleDateClick}
             events={contestEvents}
             // eventClick={handleEventClick}
-            // eventsSet={(events) => setCurrentContests(events)}
+            // eventsSet={(events) => setCurrentContests(contestEvents)}
             // initialEvents={[
             //   {
             //     id: "12315",

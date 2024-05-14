@@ -7,8 +7,7 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import MenuHeader from "../../components/MenuHeader";
 import { fetchLeaderboardData } from "../../data/participantData.js";
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect } from "react";
 
 const Leaderboard = () => {
   const theme = useTheme();
@@ -20,19 +19,19 @@ const Leaderboard = () => {
     const fetchData = async () => {
       try {
         const data = await fetchLeaderboardData();
-        console.log('Fetched data:', data);
+        console.log("Fetched data:", data);
         if (data) {
           setRowData(data);
         } else {
-          console.error('Failed to fetch leaderboard data');
+          console.error("Failed to fetch leaderboard data");
         }
       } catch (error) {
-        console.error('Error fetching leaderboard data:', error);
+        console.error("Error fetching leaderboard data:", error);
       }
     };
 
     fetchData();
-  }, []); 
+  }, []);
 
   const columns = [
     { field: "id", headerName: "Rank" },
@@ -59,20 +58,20 @@ const Leaderboard = () => {
       field: "ac_solve",
       headerName: "Atcoder",
       type: "number",
-      flex: 1
+      flex: 1,
     },
     {
       field: "vjudge_solve",
       headerName: "Offline",
       type: "number",
-      flex: 1
+      flex: 1,
     },
     {
       field: "score",
       headerName: "Score",
       type: "float",
-      flex: 1
-    }
+      flex: 1,
+    },
   ];
 
   return (
@@ -107,7 +106,6 @@ const Leaderboard = () => {
           },
         }}
       >
-        
         <DataGrid
           checkboxSelection
           rows={rowData}
@@ -115,7 +113,6 @@ const Leaderboard = () => {
           slots={{
             toolbar: GridToolbar,
           }}
-
         />
       </Box>
     </Box>
