@@ -35,16 +35,11 @@ class leaderboardData:
 	def retrieveAndSort():
 
 		try :
-			ContestCollection = leaderboardData.db.collection('Online Contest')
-			start_date = datetime(2024, 1, 1) 
-			end_date = datetime(2024, 12, 31) 
 			
-			query = leaderboardData.db.collection('Online Contest') \
-			.where('`Contest Date`', '>=', start_date) \
-			.where('`Contest Date`', '<=', end_date) \
-			.order_by('`Contest Date`')
-			
+			query = leaderboardData.db.collection('Contest Result')
 			result = query.stream()
+   
+
 			
 			cf_solve = {}
 			cc_solve = {}
@@ -54,21 +49,22 @@ class leaderboardData:
 			
 			for doc in result:
 				data = doc.to_dict()
-				username = data.get('Username')
-				contest_type = data.get('Contest Type')
-				solved = data.get('Solved')
+				# print(data)
+				username = data.get('email')
+				contest_type = data.get('type')
+				solved = data.get('solved')
 		
 				if username is not None:  
 					if contest_type == 'Codeforces':
-							cf_solve[username] = cf_solve.get(username, 0) + solved
+							cf_solve[username] = cf_solve.get(username, 0) + int(solved)
 					elif contest_type == 'Codechef':
-							cc_solve[username] = cc_solve.get(username, 0) + solved
+							cc_solve[username] = cc_solve.get(username, 0) + int(solved)
 					elif contest_type == 'Atcoder':
-							ac_solve[username] = cf_solve.get(username, 0) + solved
+							ac_solve[username] = cf_solve.get(username, 0) + int(solved)
 					else:
-							vjudge_solve[username] = vjudge_solve.get(username, 0) + solved
+							vjudge_solve[username] = vjudge_solve.get(username, 0) + int(solved)
 			
-					usernames.add(data['Username'])
+					usernames.add(data['email'])
 			
 			final_data = {}
 
@@ -114,4 +110,4 @@ class leaderboardData:
 
 
 
-leaderboardData.retrieveAndSort()
+print(leaderboardData.retrieveAndSort())
