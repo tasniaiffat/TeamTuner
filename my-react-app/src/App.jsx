@@ -60,6 +60,7 @@ function App() {
         <CssBaseline style={{ backgroundColor: colors.primary[400] }} />
         <div className="app">
           {isAuthenticated && <Sidebar username={username} isAdmin={isAdmin} />}
+          {/* <Sidebar username={username} isAdmin={isAdmin} /> */}
           <main className="content">
             {isAuthenticated && <Topbar />}
             {!isAuthenticated && <GuestTopbar/>}

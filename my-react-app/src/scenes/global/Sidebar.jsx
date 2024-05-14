@@ -155,13 +155,13 @@ const Sidebar = ({username, isAdmin}) => {
               setSelected={setSelected}
             />
 
-            <Item
+            {isAdmin && (<Item
               title="Add Contest"
               to="/addcontest"
               icon={<AddBoxIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            />)}
 
             <Item
               title="Teams"
