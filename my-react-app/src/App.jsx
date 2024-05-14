@@ -15,6 +15,7 @@ import About from './scenes/about/index.jsx';
 import AddContest from './scenes/addcontest/index.jsx';
 import { tokens } from './theme';
 import Teams from './scenes/teams/index.jsx';
+import GuestTopbar from './scenes/global/GuestTopbar.jsx';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -58,9 +59,10 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline style={{ backgroundColor: colors.primary[400] }} />
         <div className="app">
-          <Sidebar username={username} isAdmin={isAdmin} />
+          {isAuthenticated && <Sidebar username={username} isAdmin={isAdmin} />}
           <main className="content">
-            <Topbar />
+            {isAuthenticated && <Topbar />}
+            {!isAuthenticated && <GuestTopbar/>}
 
             <Routes>
               <Route
