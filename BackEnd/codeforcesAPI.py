@@ -164,5 +164,3 @@ class codeforcesAPI:
             return {"message" : str(e)}
         
         
-
-print(codeforcesAPI.addContestantInfo())

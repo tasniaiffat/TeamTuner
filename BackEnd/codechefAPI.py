@@ -153,4 +153,3 @@ class codechefAPI:
             return {"message" : str(e)}
         
         
-print(codechefAPI.addContestantInfo())

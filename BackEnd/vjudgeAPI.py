@@ -111,5 +111,4 @@ class vjudgeAPI:
     except Exception as e:
         return {"message" : str(e)}
   
-  
-print(vjudgeAPI.addContestantInfo())
+

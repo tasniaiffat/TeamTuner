@@ -178,4 +178,3 @@ class atcoderAPI:
             return {"message" : str(e)}
         
     
-print(atcoderAPI.addContestantInfo())
