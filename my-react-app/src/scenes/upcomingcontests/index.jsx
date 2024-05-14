@@ -63,6 +63,8 @@ useEffect(() => {
 
   const [showModal, setShowModal] = useState(false);
 
+  
+
   const getContestOnDate = async (formattedDate) => {
     try {
       const queryParams = { date: formattedDate };
@@ -86,6 +88,20 @@ useEffect(() => {
     }
   };
   
+  const findAllContests = async () =>{
+    try{
+      const Url = 'http://127.0.0.1:8000/contest/allUpcomingAddedContests';
+      const response = await fetch(Url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      return data;
+    }catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
 
   const handleDateClick =  async (selectInfo) => {
     // setShowModal(true);

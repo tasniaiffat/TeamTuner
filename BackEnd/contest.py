@@ -84,6 +84,9 @@ class contest:
             )
     
     
+    
+    
+    
     @contestRouter.put("/contest/RemoveContest")
     async def RemoveContest(info: contestInfo):
         try:
@@ -128,7 +131,24 @@ class contest:
             print("Error:", e)
             return None
     
-      
+    @contestRouter.get("/contest/allUpcomingAddedContests")
+    async def allUpcomingAddedContests():
+        try:
+            allAddedContests = contest.get_all_data("AddedContest")
+            upcomingOnes = []
+            for contests in allAddedContests:
+                date = contests['date']
+                contest_date = datetime.strptime(date, "%d %B, %Y")
+                current_date = datetime.now()
+                if contest_date >= current_date: 
+                   upcomingOnes.append(contests) 
+            
+            print(upcomingOnes)
+            return JSONResponse(content={"upcoming_contests": upcomingOnes})
+
+        except Exception as e:
+            return {"message" : str(e)}
+        
     @contestRouter.get("/contest/listContest")
     async def listContest():
         try:
@@ -167,4 +187,5 @@ class contest:
         
         except Exception as e:
             return JSONResponse(content={"message": str(e)})
-            
+
+print(contest.allUpcomingAddedContests())
