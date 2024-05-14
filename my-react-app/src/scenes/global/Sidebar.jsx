@@ -1,7 +1,18 @@
 import React from "react";
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
@@ -47,6 +58,33 @@ const Sidebar = ({ username, isAdmin }) => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(TeamTuner);
+
+  const handleImageClick = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleConfirmChange = () => {
+    document.getElementById("fileInput").click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+    setOpenDialog(false);
+  };
 
   return (
     <Box
@@ -103,9 +141,9 @@ const Sidebar = ({ username, isAdmin }) => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  //put user photo here. can be uploaded in settings
-                  src={TeamTuner}
+                  src={selectedImage}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
+                  onClick={handleImageClick}
                 />
               </Box>
               <Box textAlign="center">
@@ -179,6 +217,31 @@ const Sidebar = ({ username, isAdmin }) => {
               icon={<InfoIcon />}
               selected={selected}
               setSelected={setSelected}
+            />
+
+            <Dialog open={openDialog} onClose={handleDialogClose}>
+              <DialogTitle>{"Change Profile Picture"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Are you sure you want to change your profile picture?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleDialogClose} color="primary">
+                  Nevermind
+                </Button>
+                <Button onClick={handleConfirmChange} color="primary" autoFocus>
+                  Yes!
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+            <input
+              type="file"
+              id="fileInput"
+              style={{ display: "none" }}
+              accept="image/*"
+              onChange={handleFileChange}
             />
           </Box>
         </Menu>

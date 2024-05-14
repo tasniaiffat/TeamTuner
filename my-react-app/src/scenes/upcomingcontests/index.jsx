@@ -26,44 +26,41 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
-
 const UpcomingContests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [contestEvents, setContestEvents] = useState([]);
+  const [currentEvents, setCurrentEvents] = useState([]);
 
-useEffect(() => {
-  const fetchContestData = async () => {
-    try {
-      const today = new Date()
-      const options = { day: '2-digit', month: 'short', year: 'numeric' };
-      const formattedToday = today.toLocaleDateString('en-US', options);
-      // Split the formatted date by space
-      const parts = formattedToday.split(' ');
-      const formattedDate = `${parts[1]} ${parts[0]}, ${parts[2]}`;
-      const formattedDateWithoutComma = formattedDate.replace(',', '');
-      console.log(formattedDateWithoutComma); // Output: "16 May, 2024"
-      const response = await getContestOnDate(formattedDateWithoutComma);
-      console.log(response);
-      if (response && response.Contests) {
-        const events = response.Contests.map(contest => ({
-          id: contest.id,
-          title: contest.title,
-          date: contest.date,
-          time: contest.time,
-        }));
-        setContestEvents(events);
-    }} 
-    catch (error) {
-      console.error('Error fetching contest data:', error);
-    }
-  };
-  fetchContestData();
-}, []);
+  useEffect(() => {
+    const fetchContestData = async () => {
+      try {
+        const today = new Date();
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        const formattedToday = today.toLocaleDateString('en-US', options);
+        const parts = formattedToday.split(' ');
+        const formattedDate = `${parts[1]} ${parts[0]}, ${parts[2]}`;
+        const formattedDateWithoutComma = formattedDate.replace(',', '');
+        console.log(formattedDateWithoutComma); // Output: "16 May 2024"
+        const response = await getContestOnDate(formattedDateWithoutComma);
+        console.log(response);
+        if (response && response.Contests) {
+          const events = response.Contests.map(contest => ({
+            id: contest.id,
+            title: contest.title,
+            date: contest.date,
+            time: contest.time,
+          }));
+          setContestEvents(events);
+        }
+      } catch (error) {
+        console.error('Error fetching contest data:', error);
+      }
+    };
+    fetchContestData();
+  }, []);
 
   const [showModal, setShowModal] = useState(false);
-
-  
 
   const getContestOnDate = async (formattedDate) => {
     try {
@@ -88,8 +85,8 @@ useEffect(() => {
     }
   };
   
-  const findAllContests = async () =>{
-    try{
+  const findAllContests = async () => {
+    try {
       const Url = 'http://127.0.0.1:8000/contest/allUpcomingAddedContests';
       const response = await fetch(Url);
       if (!response.ok) {
@@ -97,48 +94,33 @@ useEffect(() => {
       }
       const data = await response.json();
       return data;
-    }catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-}
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  };
 
-  const handleDateClick =  async (selectInfo) => {
-    // setShowModal(true);
+  const handleDateClick = async (selectInfo) => {
     const selectedDate = selectInfo.start;
     const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
 
-  const date = selectedDate.getDate();
-  const monthIndex = selectedDate.getMonth();
-  const year = selectedDate.getFullYear();
+    const date = selectedDate.getDate();
+    const monthIndex = selectedDate.getMonth();
+    const year = selectedDate.getFullYear();
 
-  const formattedDate = `${date} ${monthNames[monthIndex]}, ${year}`;
+    const formattedDate = `${date} ${monthNames[monthIndex]}, ${year}`;
 
-  console.log("Selected date:", formattedDate);
+    console.log("Selected date:", formattedDate);
 
-  try {
-    const contestData = await getContestOnDate(formattedDate);
-    setContestEvents(contestData.Contests); // Assuming contestData is an object with a Contests array
-  } catch (error) {
-    console.error('Error fetching contest data:', error);
-  }
-
-    // const calendarApi = selectInfo.view.calendar;
-    // calendarApi.unselect();
-
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     id: `${selected.dateStr}-${title}`,
-    //     title,
-    //     link: "url",
-    //     start: selected.startStr,
-    //     end: selected.endStr,
-    //     allDay: selected.allDay,
-    //   });
-    // }
+    try {
+      const contestData = await getContestOnDate(formattedDate);
+      setContestEvents(contestData.Contests); // Assuming contestData is an object with a Contests array
+    } catch (error) {
+      console.error('Error fetching contest data:', error);
+    }
   };
 
   const handleEventClick = (selected) => {
@@ -167,11 +149,10 @@ useEffect(() => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
-            console.log(formJson.title, formJson.url);//NEED TO CREATE NEW EVENT WITH THESE
+            console.log(formJson.title, formJson.url); // NEED TO CREATE NEW EVENT WITH THESE
 
             setShowModal(false);
           }}
-
           PaperProps={{
             sx: {
               backgroundColor: colors.blueAccent[700],
@@ -224,31 +205,29 @@ useEffect(() => {
           p="10px"
           borderRadius="4px"
           height="65vh"
-          // ml="10px"
-          // maxWidth="150px"
         >
           <Typography variant="h5">Contests</Typography>
           <List>
-          {contestEvents.map((event) => (
-            <ListItem
-              key={event.id}
-              sx={{
-                backgroundColor: colors.greenAccent[500],
-                margin: "10px 0",
-                borderRadius: "2px",
-              }}
-            >
-              <ListItemText
-                primary={event.title}
-                secondary={
-                  <Typography>
-                    {event.time} {/* Display the time */}
-                  </Typography>
-                }
-              />
-            </ListItem>
-          ))}
-        </List>
+            {contestEvents.map((event) => (
+              <ListItem
+                key={event.id}
+                sx={{
+                  backgroundColor: colors.greenAccent[500],
+                  margin: "10px 0",
+                  borderRadius: "2px",
+                }}
+              >
+                <ListItemText
+                  primary={event.title}
+                  secondary={
+                    <Typography>
+                      {event.time} {/* Display the time */}
+                    </Typography>
+                  }
+                />
+              </ListItem>
+            ))}
+          </List>
         </Box>
 
         {/* CALENDAR */}
@@ -273,23 +252,9 @@ useEffect(() => {
             selectMirror={true}
             dayMaxEvents={true}
             select={handleDateClick}
-            events={contestEvents}
-            // eventClick={handleEventClick}
-            // eventsSet={(events) => setCurrentContests(contestEvents)}
-            // initialEvents={[
-            //   {
-            //     id: "12315",
-            //     title: "All-day event",
-            //     url: "https://codeforces.com/contest/1970",
-            //     date: "2022-09-14",
-            //   },
-            //   {
-            //     id: "5123",
-            //     title: "Timed event",
-            //     url: "https://codeforces.com/contest/1970",
-            //     date: "2022-09-28",
-            //   },
-            // ]}
+            events={contestEvents} // Use contestEvents directly
+            eventClick={handleEventClick}
+            eventsSet={(events) => setCurrentEvents(events)}
           />
         </Box>
       </Box>
@@ -298,11 +263,3 @@ useEffect(() => {
 };
 
 export default UpcomingContests;
-
-
-
-
-
-
-
-

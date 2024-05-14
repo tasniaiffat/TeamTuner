@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme, TextField, Button } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataTeam } from "../../data/mockData";
@@ -14,6 +14,11 @@ const Leaderboard = () => {
   const colors = tokens(theme.palette.mode);
 
   const [rowData, setRowData] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [atcoderWeight, setAtcoderWeight] = useState("");
+  const [codeforcesWeight, setCodeforcesWeight] = useState("");
+  const [codechefWeight, setCodechefWeight] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +37,37 @@ const Leaderboard = () => {
 
     fetchData();
   }, []);
+
+  const handleEnter = () => {
+    if (
+      startDate &&
+      endDate &&
+      atcoderWeight &&
+      codeforcesWeight &&
+      codechefWeight
+    ) {
+      const atcoderWeightFloat = parseFloat(atcoderWeight);
+      const codeforcesWeightFloat = parseFloat(codeforcesWeight);
+      const codechefWeightFloat = parseFloat(codechefWeight);
+
+      if (
+        !isNaN(atcoderWeightFloat) &&
+        !isNaN(codeforcesWeightFloat) &&
+        !isNaN(codechefWeightFloat)
+      ) {
+        // Handle the logic for the entered values here
+        console.log("Start Date:", startDate);
+        console.log("End Date:", endDate);
+        console.log("Atcoder Weight:", atcoderWeightFloat);
+        console.log("Codeforces Weight:", codeforcesWeightFloat);
+        console.log("Codechef Weight:", codechefWeightFloat);
+      } else {
+        console.error("Weights must be valid numbers");
+      }
+    } else {
+      console.error("All fields must be filled");
+    }
+  };
 
   const columns = [
     { field: "id", headerName: "Rank" },
@@ -77,6 +113,43 @@ const Leaderboard = () => {
   return (
     <Box m="20px">
       <MenuHeader title="LEADERBOARD" subtitle="This is made using mock data" />
+      <Box display="flex" gap="20px" my="20px">
+        <TextField
+          label="Start Date"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <TextField
+          label="End Date"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+        <TextField
+          label="Atcoder Weight"
+          type="number"
+          value={atcoderWeight}
+          onChange={(e) => setAtcoderWeight(e.target.value)}
+        />
+        <TextField
+          label="Codeforces Weight"
+          type="number"
+          value={codeforcesWeight}
+          onChange={(e) => setCodeforcesWeight(e.target.value)}
+        />
+        <TextField
+          label="Codechef Weight"
+          type="number"
+          value={codechefWeight}
+          onChange={(e) => setCodechefWeight(e.target.value)}
+        />
+        <Button variant="contained" onClick={handleEnter}>
+          Enter
+        </Button>
+      </Box>
       <Box
         m="40px 0 0 0"
         height="65vh"
