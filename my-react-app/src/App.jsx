@@ -97,7 +97,7 @@ function App() {
               />
               <Route
                 path="/teams"
-                element={isAuthenticated ? <Teams /> : <Navigate to="/login" />}
+                element={isAuthenticated ? <Teams isAdmin={isAdmin} /> : <Navigate to="/login" />}
               />
               <Route
                 path="/upcomingcontests"

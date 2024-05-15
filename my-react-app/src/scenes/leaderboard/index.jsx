@@ -111,7 +111,17 @@ const Leaderboard = () => {
   ];
 
   return (
-    <Box m="20px">
+    <Box
+      m="20px"
+      sx={{
+        overflowY: "auto",
+        backgroundColor: colors.primary,
+        maxHeight: "80vh",
+        "::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+    >
       <MenuHeader title="LEADERBOARD" subtitle="This is made using mock data" />
       <Box display="flex" gap="20px" my="20px">
         <TextField

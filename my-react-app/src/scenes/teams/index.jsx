@@ -19,7 +19,7 @@ import {
 import { tokens } from "../../theme";
 import { Person } from "@mui/icons-material";
 
-const Teams = () => {
+const Teams = ({ isAdmin }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -285,7 +285,7 @@ const Teams = () => {
     >
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <MenuHeader title="Teams" subtitle="Top Teams of CSEDU!" />
-        <Tooltip title="Create Team">
+        {isAdmin && (<Tooltip title="Create Team">
           <Button
             onClick={() => setModalOpen(true)}
             variant="contained"
@@ -294,7 +294,7 @@ const Teams = () => {
           >
             Create Team
           </Button>
-        </Tooltip>
+        </Tooltip>)}
       </Box>
       {/* Created Teams Cards (Announced Teams) */}
       {createdTeams.length > 0 && (
@@ -330,14 +330,14 @@ const Teams = () => {
                   </Typography>
                 ))}
                 {/* Delete button */}
-                <Button
+                {isAdmin && (<Button
                   onClick={() => handleDeleteTeam(team.teamName, team.members)}
                   variant="contained"
                   color="error"
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2}}
                 >
                   Delete
-                </Button>
+                </Button>)}
               </CardContent>
             </Card>
           ))}
