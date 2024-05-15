@@ -1,5 +1,3 @@
-// App.jsx
-
 import React, { useState, useEffect } from "react";
 import { ColorModeContext, useMode } from "./theme.js";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -21,47 +19,54 @@ import AddContest from "./scenes/addcontest/index.jsx";
 import { tokens } from "./theme";
 import Teams from "./scenes/teams/index.jsx";
 import GuestTopbar from "./scenes/global/GuestTopbar.jsx";
-import { useNavigate } from "react-router-dom";
 
 function App() {
   const [theme, colorMode] = useMode();
   const colors = tokens(theme.palette.mode);
 
   // State variable to track authentication status
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [username, setUsername] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const storedAuth = localStorage.getItem("isAuthenticated");
+    return storedAuth === "true";
+  });
+
+  const [isAdmin, setIsAdmin] = useState(() => {
+    const storedAdmin = localStorage.getItem("isAdmin");
+    return storedAdmin === "true";
+  });
+
+  const [username, setUsername] = useState(() => {
+    return localStorage.getItem("username") || "Guest";
+  });
 
   useEffect(() => {
-    console.log("isAuthenticated changed:", isAuthenticated);
+    localStorage.setItem("isAuthenticated", isAuthenticated);
   }, [isAuthenticated]);
 
   useEffect(() => {
-    console.log("isAdmin changed:", isAdmin);
+    localStorage.setItem("isAdmin", isAdmin);
   }, [isAdmin]);
 
   useEffect(() => {
-    console.log("Username is: ", username);
+    localStorage.setItem("username", username);
   }, [username]);
 
-  // Function to handle user authentication
   const handleLogin = (newUsername) => {
-    // Perform authentication logic here
-    // If authentication is successful, set isAuthenticated to true
     setIsAuthenticated(true);
     setUsername(newUsername);
-    console.log(isAuthenticated);
   };
 
   const handleAdmin = () => {
     setIsAdmin(true);
-    console.log(isAdmin);
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     setIsAdmin(false);
     setUsername("Guest");
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("username");
   };
 
   return (
@@ -70,10 +75,12 @@ function App() {
         <CssBaseline style={{ backgroundColor: colors.primary[400] }} />
         <div className="app">
           {isAuthenticated && <Sidebar username={username} isAdmin={isAdmin} />}
-          {/* <Sidebar username={username} isAdmin={isAdmin} /> */}
           <main className="content">
-            {isAuthenticated && <Topbar handleLogout = {handleLogout}/>}
-            {!isAuthenticated && <GuestTopbar />}
+            {isAuthenticated ? (
+              <Topbar handleLogout={handleLogout} />
+            ) : (
+              <GuestTopbar />
+            )}
 
             <Routes>
               <Route
@@ -119,7 +126,6 @@ function App() {
                   isAuthenticated ? <AddContest /> : <Navigate to="/login" />
                 }
               />
-              {/* Redirect all other routes to login */}
               <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
           </main>

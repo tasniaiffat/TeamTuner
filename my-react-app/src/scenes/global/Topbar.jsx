@@ -31,16 +31,16 @@ const Topbar = ({handleLogout}) => {
   }
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2}>
+    <Box display="flex" alignContent="right" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
-      <Box
+      {/* <Box
         display="flex"
         backgroundColor={colors.primary[400]}
         borderRadius="3px"
       >
         <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search"></InputBase>
         <IconButton type="button" sx={{ p: 1 }}></IconButton>
-      </Box>
+      </Box> */}
 
       {/* ICONS */}
       <Box display="flex">
@@ -51,6 +51,8 @@ const Topbar = ({handleLogout}) => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
+        </Box>
+        <Box>
         <IconButton onClick={handleClickOpen}>
           <LogoutIcon />
         </IconButton>
