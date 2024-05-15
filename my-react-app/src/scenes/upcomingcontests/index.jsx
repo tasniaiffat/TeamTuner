@@ -44,8 +44,16 @@ const UpcomingContests = () => {
             date: formatDateForCalendar(contest.date),
             time: contest.time,
           }));
+
+          const showevents = response.upcoming_contests.map((contest) => ({
+            id: contest.id,
+            title: contest.title,
+            start: formatDateForCalendar(contest.date)}));
+
+          
           setContestEvents(events);
-          setCalendarEvents(events);
+          setCalendarEvents(showevents);
+          console.log(showevents);
         }
       } catch (error) {
         console.error("Error fetching contest data:", error);
@@ -57,18 +65,18 @@ const UpcomingContests = () => {
   const formatDateForCalendar = (dateString) => {
     const [day, month, year] = dateString.split(" ");
     const monthIndex = {
-      Jan: "01",
-      Feb: "02",
-      Mar: "03",
-      Apr: "04",
-      May: "05",
-      Jun: "06",
-      Jul: "07",
-      Aug: "08",
-      Sep: "09",
-      Oct: "10",
-      Nov: "11",
-      Dec: "12",
+      "Jan,": "01",
+      "Feb,": "02",
+      "Mar,": "03",
+      "Apr,": "04",
+      "May,": "05",
+      "June,": "06",
+      "July,": "07",
+      "Aug,": "08",
+      "Sep,": "09",
+      "Oct,": "10",
+      "Nov,": "11",
+      "Dec,": "12",
     }[month];
     return `${year}-${monthIndex}-${day.padStart(2, "0")}`;
   };
@@ -138,7 +146,7 @@ const UpcomingContests = () => {
     const monthIndex = selectedDate.getMonth();
     const year = selectedDate.getFullYear();
 
-    const formattedDate = `${date} ${monthNames[monthIndex]}, ${year}`;
+    const formattedDate = `${date} ${monthIndex}, ${year}`;
 
     console.log("Selected date:", formattedDate);
 
@@ -297,7 +305,7 @@ const UpcomingContests = () => {
             dayMaxEvents={true}
             select={handleDateClick}
             events={calendarEvents} // Use contestEvents directly
-            eventClick={handleEventClick}
+            // eventClick={handleEventClick}
           />
         </Box>
       </Box>
