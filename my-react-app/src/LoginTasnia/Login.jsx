@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Button, TextField, Typography, useTheme, Alert } from "@mui/material";
 import Header from "../Header/Header";
 import { tokens } from "../theme";
 import { useNavigate } from "react-router-dom";
 
-function Login({handleLogin, handleAdmin}) {
+function Login({ handleLogin, handleAdmin }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -13,6 +13,7 @@ function Login({handleLogin, handleAdmin}) {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -34,10 +35,11 @@ function Login({handleLogin, handleAdmin}) {
       const data = await response.json();
       console.log(data);
       handleLogin(data.user["Email"]);
-      if(data.user["Admin"]=="Yes")handleAdmin()
+      if (data.user["Admin"] === "Yes") handleAdmin();
       navigate("/dashboard");
     } catch (error) {
       console.error("Error:", error.message);
+      setError("Email and Password do not match. Please try again.");
     }
   }
 
@@ -47,6 +49,7 @@ function Login({handleLogin, handleAdmin}) {
       ...prevState,
       [name]: value,
     }));
+    setError(""); // Clear the error message when user starts typing
   }
 
   function handleRegisterLink() {
@@ -76,6 +79,11 @@ function Login({handleLogin, handleAdmin}) {
         Login
       </Typography>
       <form onSubmit={handleSubmit}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
         {[
           { label: "Email Address", name: "email", type: "email" },
           { label: "Password", name: "password", type: "password" }
