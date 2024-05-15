@@ -122,7 +122,7 @@ const Leaderboard = () => {
         },
       }}
     >
-      <MenuHeader title="LEADERBOARD" subtitle="This is made using mock data" />
+      <MenuHeader title="LEADERBOARD" subtitle="Top contestants of CSEDU!" />
       <Box display="flex" gap="20px" my="20px">
         <TextField
           label="Start Date"
