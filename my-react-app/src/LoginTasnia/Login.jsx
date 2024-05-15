@@ -34,7 +34,7 @@ function Login({ handleLogin, handleAdmin }) {
 
       const data = await response.json();
       console.log(data);
-      handleLogin(data.user["Email"]);
+      handleLogin(data.user["Email"], data.user);
       if (data.user["Admin"] === "Yes") handleAdmin();
       navigate("/dashboard");
     } catch (error) {

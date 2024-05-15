@@ -69,3 +69,7 @@ class team(BaseModel):
     
 class deleteTeam(BaseModel):
     name : str
+    
+class judgeResult(BaseModel):
+    email : str
+    type : str

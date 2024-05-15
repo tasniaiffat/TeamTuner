@@ -19,6 +19,7 @@ import AddContest from "./scenes/addcontest/index.jsx";
 import { tokens } from "./theme";
 import Teams from "./scenes/teams/index.jsx";
 import GuestTopbar from "./scenes/global/GuestTopbar.jsx";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -39,6 +40,11 @@ function App() {
     return localStorage.getItem("username") || "Guest";
   });
 
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : []; // Parse the stored user data if it exists
+  });
+  
   useEffect(() => {
     localStorage.setItem("isAuthenticated", isAuthenticated);
   }, [isAuthenticated]);
@@ -50,10 +56,18 @@ function App() {
   useEffect(() => {
     localStorage.setItem("username", username);
   }, [username]);
+  useEffect(() => {
+    localStorage.setItem("User is: ", user);
+  }, [user]);
 
-  const handleLogin = (newUsername) => {
+  // Function to handle user authentication
+  const handleLogin = (newUsername, user) => {
+    // Perform authentication logic here
+    // If authentication is successful, set isAuthenticated to true
     setIsAuthenticated(true);
     setUsername(newUsername);
+    setUser(user)
+    console.log(isAuthenticated);
   };
 
   const handleAdmin = () => {
@@ -93,7 +107,7 @@ function App() {
               <Route
                 path="/dashboard"
                 element={
-                  isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
+                  isAuthenticated ? <Dashboard user={user}/> : <Navigate to="/login" />
                 }
               />
               <Route

@@ -23,6 +23,7 @@ class contest:
     contest_db = firestore.client()
     team = models.team
     deleteTeam = models.deleteTeam
+    judgeResult = models.judgeResult
     
     @staticmethod
     def add_data(collection_name, document_name, data):
@@ -303,6 +304,42 @@ class contest:
         except Exception as e:
             return JSONResponse(content={"message": str(e)})
 
+    @contestRouter.post("/contest/judgeResult")
+    def Result(result: judgeResult):
+        try:
+            idToTitle = []
+            idToResult = {}
+            all_contest_data = contest.get_all_data('AddedContest')
+            all_data = contest.get_all_data('Contest Result')
+            all_contest_ids = set()
+            
+            for data in all_contest_data:
+                date_obj = datetime.strptime(data['date'], "%d %B, %Y")
+                if data["oj"] == result.type:
+                    idToTitle.append((data["id"], data["title"], date_obj))  
+                    all_contest_ids.add(data["id"])
+            
+            for data in all_data:
+                if data["email"] == result.email and data["id"] in all_contest_ids:
+                    idToResult[data["id"]] = data["solved"]
+            
+            if idToTitle:  # Check if idToTitle is not empty
+                sorted_idToTitle = sorted(idToTitle, key=lambda x: x[2])
+                contest_title = []
+                contest_solved = []
 
-    
-print(contest.findMembers())
+                for contest_id, title, _ in sorted_idToTitle:
+                    contest_title.append(title)
+                    contest_solved.append(idToResult.get(contest_id, "0"))  # Default to 0 if contest_id not found
+
+                return JSONResponse(content={"title": contest_title, "solved": contest_solved})
+            else:
+                return JSONResponse(content={"message": "No contest data found"})
+
+        except IndexError:
+            return JSONResponse(content={"message": "Index error occurred"})
+        except Exception as e:
+            return JSONResponse(content={"message": str(e)})
+        
+     
+print(contest.Result({'fibnshahid@gmail.com', 'Codeforces'}))

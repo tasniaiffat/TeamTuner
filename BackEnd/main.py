@@ -24,23 +24,23 @@ async def run_scrapers():
     while True:
         # Call your scraper function
         print("Hello")
-        # codeforcesAPI.codeforcesAPI.addUpcomingContest()
-        # atcoderAPI.atcoderAPI.addUpcomingContest()
-        # codechefAPI.codechefAPI.addUpcomingContest()
-        # codeforcesAPI.codeforcesAPI.addContestantInfo()
-        # codechefAPI.codechefAPI.addContestantInfo()
-        # atcoderAPI.atcoderAPI.addContestantInfo()
-        # vjudgeAPI.vjudgeAPI.addContestantInfo()
+        codeforcesAPI.codeforcesAPI.addUpcomingContest()
+        atcoderAPI.atcoderAPI.addUpcomingContest()
+        codechefAPI.codechefAPI.addUpcomingContest()
+        codeforcesAPI.codeforcesAPI.addContestantInfo()
+        codechefAPI.codechefAPI.addContestantInfo()
+        atcoderAPI.atcoderAPI.addContestantInfo()
+        vjudgeAPI.vjudgeAPI.addContestantInfo()
         await asyncio.sleep(1200)
         
 
 app.include_router(signupAndLogin.signupAndLoginRouter)
 app.include_router(contest.contestRouter)
-# app.include_router(codeforcesAPI.codeforcesAPIRouter)
-# app.include_router(atcoderAPI.atcoderAPIRouter)
-# app.include_router(codechefAPI.codechefAPIRouter)
+app.include_router(codeforcesAPI.codeforcesAPIRouter)
+app.include_router(atcoderAPI.atcoderAPIRouter)
+app.include_router(codechefAPI.codechefAPIRouter)
 app.include_router(leaderboardData.leaderboardDataRouter)
-# app.include_router(vjudgeAPI.vjudgeAPIRouter)
+app.include_router(vjudgeAPI.vjudgeAPIRouter)
 
 
 async def shutdown_event():

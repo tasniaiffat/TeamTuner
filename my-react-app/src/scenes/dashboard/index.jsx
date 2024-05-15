@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import React from "react";
 import MenuHeader from "../../components/MenuHeader";
 import {
@@ -17,48 +18,201 @@ import { tokens } from "../../theme";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 
-const Dashboard = () => {
+const Dashboard = ({user}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const dataCodeforces = {
-    labels: ["Solved", "Unsolved"],
+  const [dataCodeforces, setDataCodeforces] = useState({
+    labels: [],
     datasets: [
       {
         label: "Codeforces Statistics",
-        data: [65, 35], // Example data: 65% solved, 35% unsolved
-        backgroundColor: [colors.greenAccent[600], colors.redAccent[600]],
-        borderColor: ["#ffffff", "#ffffff"],
+        data: [],
+        backgroundColor: ['#00ff00', '#ff0000'], // Example colors
+        borderColor: ['#ffffff', '#ffffff'],
         borderWidth: 1,
       },
     ],
-  };
+  });
 
-  const dataCodechef = {
-    labels: ["Solved", "Unsolved"],
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/contest/judgeResult',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any additional headers if required
+          },
+          body: JSON.stringify({
+            "email" : user["Email"],
+            "type" : "Codeforces"})
+        });
+        const data = await response.json();
+
+        const updatedDataCodeforces = {
+          ...dataCodeforces,
+          labels: data.title,
+          datasets: [
+            {
+              ...dataCodeforces.datasets[0],
+              data: data.solved.map(Number), // Convert solved to numbers
+            },
+          ],
+        };
+
+        setDataCodeforces(updatedDataCodeforces);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [dataCodechef, setDataCodechef] = useState({
+    labels: [],
     datasets: [
       {
         label: "Codechef Statistics",
-        data: [50, 50], // Example data
+        data: [],
         backgroundColor: ["#2196f3", "#ff9800"],
         borderColor: ["#ffffff", "#ffffff"],
         borderWidth: 1,
       },
     ],
-  };
+  });
 
-  const dataAtcoder = {
-    labels: ["Solved", "Unsolved"],
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/contest/judgeResult',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any additional headers if required
+          },
+          body: JSON.stringify({
+            "email" : user["Email"],
+            "type" : "Codechef"})
+        });
+        const data = await response.json();
+
+        const updatedDataCodechef = {
+          ...dataCodechef,
+          labels: data.title,
+          datasets: [
+            {
+              ...dataCodechef.datasets[0],
+              data: data.solved.map(Number), // Convert solved to numbers
+            },
+          ],
+        };
+
+        setDataCodechef(updatedDataCodechef);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [dataAtcoder, setDataAtcoder] = useState({
+    labels: [],
     datasets: [
       {
         label: "Atcoder Statistics",
-        data: [75, 25], // Example data
+        data: [],
         backgroundColor: ["#9c27b0", "#3f51b5"],
         borderColor: ["#ffffff", "#ffffff"],
         borderWidth: 1,
       },
     ],
-  };
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/contest/judgeResult',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any additional headers if required
+          },
+          body: JSON.stringify({
+            "email" : user["Email"],
+            "type" : "Atcoder"})
+        });
+        const data = await response.json();
+
+        const updatedDataAtcoder = {
+          ...dataAtcoder,
+          labels: data.title,
+          datasets: [
+            {
+              ...dataAtcoder.datasets[0],
+              data: data.solved.map(Number), // Convert solved to numbers
+            },
+          ],
+        };
+
+        setDataAtcoder(updatedDataAtcoder);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [dataVjudge, setDataVjudge] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Vjudge Statistics",
+        data: [],
+        backgroundColor: ["#9c27b0", "#3f51b5"],
+        borderColor: ["#ffffff", "#ffffff"],
+        borderWidth: 1,
+      },
+    ],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/contest/judgeResult',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any additional headers if required
+          },
+          body: JSON.stringify({
+            "email" : user["Email"],
+            "type" : "Vjudge"})
+        });
+        const data = await response.json();
+
+        const updatedDataVjudge = {
+          ...dataVjudge,
+          labels: data.title,
+          datasets: [
+            {
+              ...dataVjudge.datasets[0],
+              data: data.solved.map(Number), // Convert solved to numbers
+            },
+          ],
+        };
+
+        setDataVjudge(updatedDataVjudge);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Box
@@ -87,12 +241,12 @@ const Dashboard = () => {
         {/* Information Section */}
         <Box>
           <Typography variant="h3" color={colors.blueAccent[400]}>
-            John Doe
+            {user["First Name"]} {user["Last Name"]}
           </Typography>
           <Typography variant="h6">Institution: University of Dhaka</Typography>
-          <Typography variant="h6">Batch: 27</Typography>
+          <Typography variant="h6">Session: {user["Session"]}</Typography>
           <Typography variant="h6">
-            Department: Computer Science and Engineering
+            Department: {user["Department"]}
           </Typography>
         </Box>
       </Box>
@@ -149,9 +303,9 @@ const Dashboard = () => {
             color={colors.blueAccent[400]}
             gutterBottom
           >
-            Atcoder Statistics
+            Vjudge Statistics
           </Typography>
-          <Bar data={dataAtcoder} />
+          <Bar data={dataVjudge} />
         </Box>
       </Box>
 
@@ -160,3 +314,10 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+
+
+
+
+
