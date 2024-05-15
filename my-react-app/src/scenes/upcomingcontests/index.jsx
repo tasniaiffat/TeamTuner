@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
 
 import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
@@ -23,42 +23,55 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 const UpcomingContests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [contestEvents, setContestEvents] = useState([]);
-  const [currentEvents, setCurrentEvents] = useState([]);
+  const [calendarEvents, setCalendarEvents] = useState([]);
 
   useEffect(() => {
-    const fetchContestData = async () => {
+    const fetchAllContests = async () => {
       try {
-        const today = new Date();
-        const options = { day: '2-digit', month: 'short', year: 'numeric' };
-        const formattedToday = today.toLocaleDateString('en-US', options);
-        const parts = formattedToday.split(' ');
-        const formattedDate = `${parts[1]} ${parts[0]}, ${parts[2]}`;
-        const formattedDateWithoutComma = formattedDate.replace(',', '');
-        console.log(formattedDateWithoutComma); // Output: "16 May 2024"
-        const response = await getContestOnDate(formattedDateWithoutComma);
+        const response = await findAllContests();
         console.log(response);
-        if (response && response.Contests) {
-          const events = response.Contests.map(contest => ({
+        if (response && response.upcoming_contests) {
+          const events = response.upcoming_contests.map((contest) => ({
             id: contest.id,
             title: contest.title,
-            date: contest.date,
+            date: formatDateForCalendar(contest.date),
             time: contest.time,
           }));
           setContestEvents(events);
+          setCalendarEvents(events);
         }
       } catch (error) {
-        console.error('Error fetching contest data:', error);
+        console.error("Error fetching contest data:", error);
       }
     };
-    fetchContestData();
+    fetchAllContests();
   }, []);
+
+  const formatDateForCalendar = (dateString) => {
+    const [day, month, year] = dateString.split(" ");
+    const monthIndex = {
+      Jan: "01",
+      Feb: "02",
+      Mar: "03",
+      Apr: "04",
+      May: "05",
+      Jun: "06",
+      Jul: "07",
+      Aug: "08",
+      Sep: "09",
+      Oct: "10",
+      Nov: "11",
+      Dec: "12",
+    }[month];
+    return `${year}-${monthIndex}-${day.padStart(2, "0")}`;
+  };
 
   const [showModal, setShowModal] = useState(false);
 
@@ -66,36 +79,40 @@ const UpcomingContests = () => {
     try {
       const queryParams = { date: formattedDate };
       const encodedParams = Object.keys(queryParams)
-        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
-        .join('&');
-  
-      const baseUrl = 'http://127.0.0.1:8000/contest/contestOnDate';
+        .map(
+          (key) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
+        )
+        .join("&");
+
+      const baseUrl = "http://127.0.0.1:8000/contest/contestOnDate";
       const completeUrl = `${baseUrl}?${encodedParams}`;
-  
+
       const response = await fetch(completeUrl);
-  
+
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       throw error;
     }
   };
-  
+
   const findAllContests = async () => {
     try {
-      const Url = 'http://127.0.0.1:8000/contest/allUpcomingAddedContests';
+      const Url = "http://127.0.0.1:8000/contest/allUpcomingAddedContests";
       const response = await fetch(Url);
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       const data = await response.json();
+      console.log(data);
       return data;
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       throw error;
     }
   };
@@ -103,8 +120,18 @@ const UpcomingContests = () => {
   const handleDateClick = async (selectInfo) => {
     const selectedDate = selectInfo.start;
     const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
 
     const date = selectedDate.getDate();
@@ -119,7 +146,7 @@ const UpcomingContests = () => {
       const contestData = await getContestOnDate(formattedDate);
       setContestEvents(contestData.Contests); // Assuming contestData is an object with a Contests array
     } catch (error) {
-      console.error('Error fetching contest data:', error);
+      console.error("Error fetching contest data:", error);
     }
   };
 
@@ -134,7 +161,17 @@ const UpcomingContests = () => {
   };
 
   return (
-    <Box m="20px">
+    <Box
+      m="20px"
+      sx={{
+        overflowY: "auto",
+        backgroundColor: colors.primary,
+        maxHeight: "80vh",
+        "::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+    >
       <MenuHeader
         title="Upcoming Contests"
         subtitle="Find all the upcoming contests in one place!"
@@ -149,7 +186,7 @@ const UpcomingContests = () => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
-            console.log(formJson.title, formJson.url); // NEED TO CREATE NEW EVENT WITH THESE
+            console.log(formJson.title, formJson.url); 
 
             setShowModal(false);
           }}
@@ -159,8 +196,8 @@ const UpcomingContests = () => {
               color: colors.primary[600],
               p: 2,
               borderRadius: "8px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
-            }
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            },
           }}
         >
           <DialogTitle>Add New Contest</DialogTitle>
@@ -207,7 +244,14 @@ const UpcomingContests = () => {
           height="65vh"
         >
           <Typography variant="h5">Contests</Typography>
-          <List>
+          <List sx={{
+        overflowY: "auto",
+        backgroundColor: colors.primary,
+        maxHeight: "55vh",
+        "::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}>
             {contestEvents.map((event) => (
               <ListItem
                 key={event.id}
@@ -252,9 +296,8 @@ const UpcomingContests = () => {
             selectMirror={true}
             dayMaxEvents={true}
             select={handleDateClick}
-            events={contestEvents} // Use contestEvents directly
+            events={calendarEvents} // Use contestEvents directly
             eventClick={handleEventClick}
-            eventsSet={(events) => setCurrentEvents(events)}
           />
         </Box>
       </Box>
