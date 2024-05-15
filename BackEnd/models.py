@@ -53,11 +53,13 @@ class judgeInformation(BaseModel):
     codeforces: str
     email: str
     
-class contestWeight(BaseModel):
+class contestValues(BaseModel):
     cf_weight: float
     cc_weight: float
     ac_weight: float
     vjudge_weight: float
+    start_date : str
+    end_date : str
     
 class team(BaseModel):
     member1 : str

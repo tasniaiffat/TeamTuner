@@ -19,6 +19,7 @@ const Leaderboard = () => {
   const [atcoderWeight, setAtcoderWeight] = useState("");
   const [codeforcesWeight, setCodeforcesWeight] = useState("");
   const [codechefWeight, setCodechefWeight] = useState("");
+  const [vjudgeWeight, setVjudgeWeight] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,30 +39,73 @@ const Leaderboard = () => {
     fetchData();
   }, []);
 
-  const handleEnter = () => {
+  const formatDate = (dateString) => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    
+    return `${day} ${month}, ${year}`;
+  };
+
+  const handleEnter = async () => {
     if (
       startDate &&
       endDate &&
       atcoderWeight &&
       codeforcesWeight &&
-      codechefWeight
+      codechefWeight &&
+      vjudgeWeight
     ) {
       const atcoderWeightFloat = parseFloat(atcoderWeight);
       const codeforcesWeightFloat = parseFloat(codeforcesWeight);
       const codechefWeightFloat = parseFloat(codechefWeight);
-
+      const vjudgeWeightFloat = parseFloat(vjudgeWeight);
       if (
         !isNaN(atcoderWeightFloat) &&
         !isNaN(codeforcesWeightFloat) &&
-        !isNaN(codechefWeightFloat)
+        !isNaN(codechefWeightFloat) && 
+        !isNaN(vjudgeWeightFloat)
       ) {
+          try {
+            const response = await fetch('http://127.0.0.1:8000/changeValues', {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                "cf_weight" : codeforcesWeightFloat,
+                "cc_weight" : codechefWeightFloat,
+                "ac_weight" : atcoderWeightFloat,
+                "vjudge_weight" : vjudgeWeightFloat,
+                "start_date" : formatDate(startDate),
+                "end_date" : formatDate(endDate)
+              }),
+            });
+      
+            if (!response.ok) {
+              throw new Error('Failed to update data');
+            }
+            
+            const result = await response.json();
+            window.location.reload();
+            setData(result);
+            setError(null); // Clear any previous errors
+            
+          } catch (error) {
+            setError(error.message);
+
         // Handle the logic for the entered values here
         console.log("Start Date:", startDate);
         console.log("End Date:", endDate);
         console.log("Atcoder Weight:", atcoderWeightFloat);
         console.log("Codeforces Weight:", codeforcesWeightFloat);
         console.log("Codechef Weight:", codechefWeightFloat);
-      } else {
+      }
+      } 
+      else {
         console.error("Weights must be valid numbers");
       }
     } else {
@@ -143,6 +187,12 @@ const Leaderboard = () => {
           type="number"
           value={atcoderWeight}
           onChange={(e) => setAtcoderWeight(e.target.value)}
+        />
+        <TextField
+          label="Vjudge Weight"
+          type="number"
+          value={vjudgeWeight}
+          onChange={(e) => setVjudgeWeight(e.target.value)}
         />
         <TextField
           label="Codeforces Weight"
