@@ -11,7 +11,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { Navigate, useNavigate } from "react-router-dom";
 
-const Topbar = () => {
+const Topbar = ({handleLogout}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
@@ -26,13 +26,9 @@ const Topbar = () => {
     setOpen(false);
   };
 
-  const handleLogout = () => {
-    // Your logout logic here
-    
-    console.log("Logged out");
-    setOpen(false);
-    navigate('./logout');
-  };
+  const logout = () => {
+    handleLogout()
+  }
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
@@ -75,7 +71,7 @@ const Topbar = () => {
           <Button onClick={handleClose} color="primary">
             Nevermind
           </Button>
-          <Button onClick={handleLogout} color="primary" autoFocus>
+          <Button onClick={logout} color="primary" autoFocus>
             Yes, Logout
           </Button>
         </DialogActions>

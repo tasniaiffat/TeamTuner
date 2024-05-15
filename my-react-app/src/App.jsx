@@ -21,6 +21,7 @@ import AddContest from "./scenes/addcontest/index.jsx";
 import { tokens } from "./theme";
 import Teams from "./scenes/teams/index.jsx";
 import GuestTopbar from "./scenes/global/GuestTopbar.jsx";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -71,7 +72,7 @@ function App() {
           {isAuthenticated && <Sidebar username={username} isAdmin={isAdmin} />}
           {/* <Sidebar username={username} isAdmin={isAdmin} /> */}
           <main className="content">
-            {isAuthenticated && <Topbar />}
+            {isAuthenticated && <Topbar handleLogout = {handleLogout}/>}
             {!isAuthenticated && <GuestTopbar />}
 
             <Routes>
