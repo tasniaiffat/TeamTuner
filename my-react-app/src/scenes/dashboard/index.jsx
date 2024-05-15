@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import MenuHeader from "../../components/MenuHeader";
 import {
   Box,
   useTheme,
   Typography,
   Avatar,
-  colors,
   Button,
   Tooltip,
   Modal,
@@ -15,8 +14,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import { tokens } from "../../theme";
-
-import { Pie } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 
 const Dashboard = () => {
@@ -67,6 +65,7 @@ const Dashboard = () => {
       m="20px"
       sx={{
         overflowY: "auto",
+        maxHeight: "85vh",
         backgroundColor: colors.primary,
         "::-webkit-scrollbar": {
           display: "none",
@@ -98,46 +97,64 @@ const Dashboard = () => {
         </Box>
       </Box>
 
-      <Box display="flex" justifyContent="space-between" mt={4}>
+      <Box display="flex" justifyContent="space-between" mt={4} mb={10}
+      >
         {/* Codeforces Statistics */}
         <Box flex={1} p={1} width={250} height={250}>
           <Typography
-            ml="30px"
+            ml="110px"
             variant="h5"
             color={colors.blueAccent[400]}
             gutterBottom
           >
             Codeforces Statistics
           </Typography>
-          <Pie data={dataCodeforces} />
+          <Bar data={dataCodeforces} />
         </Box>
 
         {/* Codechef Statistics */}
         <Box flex={1} p={1} width={250} height={250}>
           <Typography
-            ml="40px"
+            ml="115px"
             variant="h5"
             color={colors.blueAccent[400]}
             gutterBottom
           >
             Codechef Statistics
           </Typography>
-          <Pie data={dataCodechef} />
+          <Bar data={dataCodechef} />
         </Box>
 
+        
+      </Box>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
         {/* Atcoder Statistics */}
         <Box flex={1} p={1} width={250} height={250}>
           <Typography
-            ml="40px"
+            ml="115px"
             variant="h5"
             color={colors.blueAccent[400]}
             gutterBottom
           >
             Atcoder Statistics
           </Typography>
-          <Pie data={dataAtcoder} />
+          <Bar data={dataAtcoder} />
+        </Box>
+
+        {/* Vjudge Statistics */}
+        <Box flex={1} p={1} width={250} height={250}>
+          <Typography
+            ml="115px"
+            variant="h5"
+            color={colors.blueAccent[400]}
+            gutterBottom
+          >
+            Atcoder Statistics
+          </Typography>
+          <Bar data={dataAtcoder} />
         </Box>
       </Box>
+
     </Box>
   );
 };
