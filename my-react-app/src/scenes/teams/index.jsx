@@ -17,6 +17,7 @@ import {
   Alert,
 } from "@mui/material";
 import { tokens } from "../../theme";
+import { Person } from "@mui/icons-material";
 
 const Teams = () => {
   const theme = useTheme();
@@ -151,17 +152,33 @@ const Teams = () => {
   
       if (!response.ok) {
         throw new Error("Failed to update backend");
-      }  
+      }
+  
+      setCreatedTeams([...createdTeams, newTeam]);
+  
+      // Remove selected members from the available people list
+      const remainingPeople = people.filter(
+        (person) => !selectedMembers.includes(person)
+      );
+      setPeople(remainingPeople);
+  
+      // Reset selection and close modal
       setSelectedMembers([]);
       setAlertMessage("");
       setModalOpen(false);
+  
     } catch (error) {
       console.error("Error creating team:", error);
       setAlertMessage("Failed to create team. Please try again.");
     }
   };
 
-  const handleDeleteTeam = async (teamName, teamMembers) => {
+  const deleteTeamByName = (teamNameToDelete) => {
+    setCreatedTeams(prevTeams => prevTeams.filter(team => team.teamName !== teamNameToDelete));
+  };
+
+  const handleDeleteTeam = async (teamName, teammembers) => {
+    console.log(createdTeams)
     const confirmDelete = window.confirm("Do you want to delete this contest?");
     if (confirmDelete) {
       console.log("Deleting contest:", teamName);
@@ -179,10 +196,16 @@ const Teams = () => {
         if (!response.ok) {
           throw new Error("Failed to update backend");
         }
-    
+        
+
+        people.push(...teammembers)
+        setPeople(people)
+        console.log(people)
+        deleteTeamByName(teamName)
+        
       } catch (error) {
-        console.error("Error creating team:", error);
-        setAlertMessage("Failed to create team. Please try again.");
+        console.error("Error removing team:", error);
+        setAlertMessage("Failed to remove team. Please try again.");
       }
     };
   
