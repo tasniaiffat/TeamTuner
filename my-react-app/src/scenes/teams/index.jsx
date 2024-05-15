@@ -297,6 +297,9 @@ const Teams = ({ isAdmin }) => {
         </Tooltip>)}
       </Box>
       {/* Created Teams Cards (Announced Teams) */}
+      {createdTeams.length<=0 && (
+        <Typography variant="h3">No Teams Announced Yet</Typography>
+      )}
       {createdTeams.length > 0 && (
         <>
           <Typography variant="h3" gutterBottom mt={4} mb={2}>
@@ -345,9 +348,11 @@ const Teams = ({ isAdmin }) => {
         </>
       )}
       {/* Initial Teams Cards (Teams by TeamTuner) */}
+      {isAdmin && (
       <Typography variant="h3" gutterBottom mt={4} mb={2}>
         Teams by TeamTuner
-      </Typography>
+      </Typography>)}
+      {isAdmin && (
       <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
         {generatedTeams.map((team, index) => (
           <Card
@@ -378,7 +383,7 @@ const Teams = ({ isAdmin }) => {
             </CardContent>
           </Card>
         ))}
-      </Box>
+      </Box>)}
       {teamModal} {/* Render the modal for creating teams */}
     </Box>
   );
